@@ -1,0 +1,26 @@
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!-- change Optioins to icon -->
+    <item android:id="@+id/file"
+        android:title="Options"
+        android:showAsAction="ifRoom|withText"
+    >
+        <menu>
+            <item
+                android:id="@+id/newProperty"
+                android:orderInCategory="1"
+                android:title="Add New Property"/>
+            <item
+                android:id="@+id/editProperty"
+                android:orderInCategory="2"
+                android:title="Edit Property"/>
+
+            <item
+                android:id="@+id/editTenant"
+                android:orderInCategory="3"
+                android:title="Edit Tenant"/>
+
+        </menu>
+    </item>
+</menu>
+
