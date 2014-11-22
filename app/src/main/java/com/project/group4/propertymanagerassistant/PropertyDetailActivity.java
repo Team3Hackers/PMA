@@ -23,7 +23,7 @@ import android.view.MenuItem;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link PropertyDetailFragment}.
  */
-public class PropertyDetailActivity extends FragmentActivity {
+public class PropertyDetailActivity extends FragmentActivity  {
 
 
     @Override

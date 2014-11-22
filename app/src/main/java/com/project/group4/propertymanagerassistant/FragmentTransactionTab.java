@@ -24,6 +24,7 @@ public class FragmentTransactionTab extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.removeItem(2);
+        menu.removeItem(3);
         menu.add(menu.NONE, 2, 2, "Edit");
     }
 //    @Override

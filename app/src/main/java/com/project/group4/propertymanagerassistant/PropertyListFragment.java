@@ -93,7 +93,6 @@ public class PropertyListFragment extends ListFragment {
         {
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-                Log.d("PropListFrag", "getLoaderManager()");
                 return new CursorLoader(getActivity(), PropertyProvider.URI_PROPERTY, Property.FIELDS, null ,null, null);
 
             }

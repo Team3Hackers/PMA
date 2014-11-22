@@ -60,16 +60,6 @@ public class PropertyDetailFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.view_tab_pager, container, false);
         viewPager = (ViewPager) rootView.findViewById(R.id.pager);//get pager from app xml, need to assign it to current view
         myTabAdapter = new TabAdapter(getFragmentManager());
-        viewPager.setAdapter(myTabAdapter);
-/*Left this in long for clarity
- *replace next 2 lines with {lin1 and 2}
- * if(getArguments().getBoolean(ARG_ITEM_NEW))
- */
-        Boolean selectedTab = getArguments().getBoolean(ARG_ITEM_NEW);//line1
-        if(selectedTab){//line2
-            viewPager.setCurrentItem(1, true);//This works,
-        }
-
         /**
          * Here, I pass the selected ID from the list to the adaptor.
          * The adaptor will later set the active fragment with the id.
@@ -81,22 +71,21 @@ public class PropertyDetailFragment extends Fragment{
             myTabAdapter.setId(getArguments().getLong(ARG_ITEM_ID), getArguments().getBoolean(ARG_ITEM_NEW));//Send ID to adaptor to have the property id for all fragments
 
         }
+        /** **/
+        viewPager.setAdapter(myTabAdapter);
+/*Left this in long for clarity
+ *replace next 2 lines with {lin1 and 2}
+ * if(getArguments().getBoolean(ARG_ITEM_NEW))
+ */
+
+
+        Boolean selectedTab = getArguments().getBoolean(ARG_ITEM_NEW);//line1
+        if(selectedTab){//line2
+            viewPager.setCurrentItem(1, true);//This works,
+        }
+
         return rootView;
     }
 
 
-////TEST
-//    @Override
-//    public void onPause() {
-//        setHasOptionsMenu(true);
-//       // how to clean up...
-//        Log.d("PropDetailFrag", "PAUSED");
-//        super.onPause();
-//    }
-//
-//    @Override
-//    public void onPrepareOptionsMenu(Menu menu) {
-//        menu.clear();
-//        super.onPrepareOptionsMenu(menu);
-//    }
 }

@@ -25,10 +25,12 @@ public class Tenant {
     public static final String COL_STATE = "state";
     public static final String COL_ZIP = "zip";
     public static final String COL_FICO = "fico";
+    public static final String COL_TENANT_ACTIVE = "tenant_active";
+
 
     // For database projection so order is consistent
     public static final String[] FIELDS = { COL_ID, COL_LAST_NAME, COL_FIRST_NAME,
-            COL_ADDRESS, COL_CITY, COL_STATE, COL_ZIP, COL_ZIP };
+            COL_ADDRESS, COL_CITY, COL_STATE, COL_ZIP, COL_FICO, COL_TENANT_ACTIVE };
 
     /*
      * The SQL code that creates a Table for storing Persons in.
@@ -44,7 +46,8 @@ public class Tenant {
                     + COL_CITY + " TEXT NOT NULL DEFAULT '',"
                     + COL_STATE + " TEXT NOT NULL DEFAULT '',"
                     + COL_ZIP + " TEXT NOT NULL DEFAULT '',"
-                    + COL_FICO + " TEXT NOT NULL DEFAULT '' "
+                    + COL_FICO + " TEXT NOT NULL DEFAULT '', "
+                    + COL_TENANT_ACTIVE + " TEXT NOT NULL DEFAULT '' "
                     + ")";
 
     // Fields corresponding to database columns
@@ -56,6 +59,7 @@ public class Tenant {
     public String state = "";
     public String zip = "";
     public String fico = "";
+    public String tenantActive = "";
 
     /**
      * No need to do anything, fields are already set to default values above
@@ -76,6 +80,7 @@ public class Tenant {
         this.state = cursor.getString(5);
         this.zip = cursor.getString(6);
         this.fico = cursor.getString(7);
+        this.tenantActive = cursor.getString(8);
     }
 
     /**
@@ -93,6 +98,7 @@ public class Tenant {
         values.put(COL_STATE, state);
         values.put(COL_ZIP, zip);
         values.put(COL_FICO, fico);
+        values.put(COL_TENANT_ACTIVE, tenantActive);
 
         return values;
     }

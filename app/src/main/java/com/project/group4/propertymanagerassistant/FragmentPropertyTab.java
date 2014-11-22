@@ -30,7 +30,7 @@ public class FragmentPropertyTab extends Fragment implements View.OnClickListene
 
     String textString;
     Long propertyId;
-    Boolean newProperty;
+    Boolean newProperty = false;
     TextView text;
     Button saveButton;
     @Override
@@ -124,6 +124,7 @@ public class FragmentPropertyTab extends Fragment implements View.OnClickListene
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.removeItem(2);
+        menu.removeItem(3);
         menu.add(menu.NONE, 2, 2, "Edit");
     }
 

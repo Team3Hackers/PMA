@@ -1,5 +1,6 @@
 package com.project.group4.propertymanagerassistant;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -19,10 +20,18 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
     Long propertyId;
     Boolean newProperty;
 
+    //
+    Bundle bundle = new Bundle();
 
-//base constructor
+
+    //base constructor
     public TabAdapter(FragmentManager fm) {
         super(fm);
+    }
+
+
+    public void SetBundle( Bundle args) {
+        bundle = args;
     }
 
 
@@ -30,29 +39,53 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
     @Override
     public Fragment getItem(int i) {
         Fragment fragment = null;
-
-        if(i==0){
+        switch (i) {
+            case 0:
             fragment = new FragmentTransactionTab();
-        }
-        if(i==1){
-            fragment = new FragmentPropertyTab();
-            ((FragmentPropertyTab) fragment).setPropertyId(propertyId, newProperty);//Passing property id and property status to the
-            // fragment. Must be a better way...
-        }
-        if(i==2){
-            fragment = new FragmentTenantTab();
-            ((FragmentTenantTab) fragment).setPropertyId(propertyId, newProperty);
 
-        }
-        if(i==3){
+            break;
+        case 1:
+            fragment = new FragmentPropertyTab();
+
+            ((FragmentPropertyTab) fragment).setPropertyId(propertyId, newProperty);//Passing property id and property status to the
+            break;
+        case 2:
+//            if(false)//Call back???
+//            {
+            //This is the root view to be replaced by other fragments.
+            fragment = new RootFragment();
+            ((RootFragment) fragment).setPropertyArgs(propertyId, newProperty);
+                //fragment = new FragmentTenantTab();
+                //((FragmentTenantTab) fragment).setPropertyId(propertyId, newProperty);
+//            }
+//            else
+//            {
+//                fragment = new StaticFragment();
+//                break;
+//            }
+
+            break;
+
+        case 3:
             fragment = new FragmentOwnerTab();
             ((FragmentOwnerTab) fragment).setPropertyId(propertyId);//Passing property id to the fragment
-        }
-        if(i==4){
-            fragment = new FragmentReportTab();
-        }
+            break;
+        case 4:
 
-        
+            fragment = new FragmentReportTab();
+            break;
+
+
+         default:
+            //Never goes here
+             fragment = new StaticFragment();
+
+            break;
+        }
+        //bundle.putBoolean("new_property", newProperty);
+        //bundle.putLong("item_id", propertyId);
+
+        fragment.setArguments(this.bundle);
         return fragment;
     }
 
@@ -94,7 +127,9 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
     public void setId(Long data, Boolean status){
         propertyId = data;
         newProperty = status;
+
     }
+
 
 
 

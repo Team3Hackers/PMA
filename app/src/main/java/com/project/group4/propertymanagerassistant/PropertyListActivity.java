@@ -57,7 +57,7 @@ public class PropertyListActivity extends FragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_property_list);//WE NEED TO FIG OUT HOW TO QUERY AND POP DATA HERE
+        setContentView(R.layout.activity_property_list);
 
         if (findViewById(R.id.property_detail_container) != null) {
             // The detail container view will be present only in the
@@ -171,7 +171,7 @@ public class PropertyListActivity extends FragmentActivity
                 result = true;
                 // Create a new person.
                 Property p = new Property();
-                DatabaseHandler.getInstance(this).putProperty(p);
+                DatabaseHandler.getInstance(this).putNewProperty(p);//putNewProperty is hail mary
                 // Open a new fragment with the new id
                 onItemSelected(p.id);
 Log.d("OptionSelected: " , "New Proprty");

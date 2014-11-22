@@ -19,11 +19,10 @@ public class TenantActive {
     public static final String COL_PROPERTY_ID = "_id_property";
     // These fields can be anything you want.
     public static final String COL_TENANT_ID = "_id_tenant";
-    public static final String COL_TENANT_ACTIVE = "tenant_active";
 
 
     // For database projection so order is consistent
-    public static final String[] FIELDS = { COL_PROPERTY_ID, COL_TENANT_ID, COL_TENANT_ACTIVE };
+    public static final String[] FIELDS = { COL_PROPERTY_ID, COL_TENANT_ID };
 
     /*
      * The SQL code that creates a Table for storing Persons in.
@@ -32,15 +31,14 @@ public class TenantActive {
      */
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + "("
-                    + COL_TENANT_ID + " INTEGER NOT NULL,"
-                    + COL_PROPERTY_ID + " INTEGER NOT NULL,"
-                    + COL_TENANT_ACTIVE + " TEXT NOT NULL DEFAULT '' "
-                    + ")";
+                    + COL_TENANT_ID + " INTEGER NOT NULL, "
+                    + COL_PROPERTY_ID + " INTEGER NOT NULL, "
+                    + " FOREIGN KEY(" + COL_PROPERTY_ID + " ) REFERENCES Property ( _id ) ," /*explicit string of _id */
+                    + " FOREIGN KEY(" + COL_TENANT_ID + " ) REFERENCES Tenant ( _id ) )";
 
     // Fields corresponding to database columns
     public long id = -1;
     public long idTenant = -1;
-    public long tenantActive = -1;
 
 
     /**
@@ -56,7 +54,7 @@ public class TenantActive {
         // Indices expected to match order in FIELDS!
         this.id = cursor.getLong(0);
         this.idTenant= cursor.getLong(1);
-        this.tenantActive = cursor.getInt(2);
+
 
     }
 
@@ -70,7 +68,7 @@ public class TenantActive {
 
         values.put(COL_PROPERTY_ID, id);
         values.put(COL_TENANT_ID, idTenant);
-        values.put(COL_TENANT_ACTIVE, tenantActive);
+
 
 
         return values;
