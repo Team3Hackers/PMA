@@ -25,16 +25,6 @@ import com.project.group4.propertymanagerassistant.database.Property;
 import com.project.group4.propertymanagerassistant.database.Tenant;
 import com.project.group4.propertymanagerassistant.database.TenantActive;
 
-/**
- * TODO: can add actions for edit:
- *          - query with the join, then put back into tenant for edit. should problaly check for
- *            check for same name?
- *          - add new tenant to options menu item. do a zero on active content, then blank the form,
- *            then insert into tenant and activetenant.
- *          - if time permits, add a list of past tenants item on options menu
- *            query and display into new fragment list.
- */
-
 
 /**
  * Created by benhoelzel on 10/26/14.
