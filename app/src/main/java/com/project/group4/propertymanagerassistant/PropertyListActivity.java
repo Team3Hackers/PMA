@@ -164,7 +164,7 @@ public class PropertyListActivity extends FragmentActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean result = false;
         switch (item.getItemId()){
-            case 1://New property = 1. no xml right now
+            case 0://New property = 1. no xml right now
                 newProperty = true;
 //                editProperty = false;
 //                editTenant = false;
@@ -174,7 +174,6 @@ public class PropertyListActivity extends FragmentActivity
                 DatabaseHandler.getInstance(this).putNewProperty(p);//putNewProperty is hail mary
                 // Open a new fragment with the new id
                 onItemSelected(p.id);
-Log.d("OptionSelected: " , "New Proprty");
                 break;
         /**    case R.id.editProperty:
                 newProperty = false;

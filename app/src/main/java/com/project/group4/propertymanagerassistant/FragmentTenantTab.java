@@ -277,16 +277,16 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
     @Override
     public void onClick(View view) {
 
-        /** Updates the empty table that was created when the user clicks "New Property", and then
+        /** BROKEN: Not making active Tenant
+         *  Updates the empty table that was created when the user clicks "New Property", and then
          *  clicks the "New Tenant" option.
          *  When a Property is made, there is a blank table for all relations for that
          *  property. So we do this logic to prevent a blank record when the user performs
          *  the steps: "New Property" and then "New Tenant"
          **/
-        if (newTenant && newProperty){
+        if (newProperty){
             updateTenantFromUI();//Update existing active tenant
             //not tested!
-            newTenant = false;//The tenant is not new here now
             newProperty =false;
         }
         /** Stores the current tenant in the tenant table, but sets that tenant's active field

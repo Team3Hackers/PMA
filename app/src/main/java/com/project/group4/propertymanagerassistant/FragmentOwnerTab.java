@@ -78,7 +78,6 @@ public class FragmentOwnerTab extends Fragment implements  View.OnClickListener 
         //Display current owner
         if (propertyId != null) {
             // Get property detail from database
-            Log.d("WTF", "::craper");
             mItem = DatabaseHandler.getInstance(getActivity()).getOwnerJoinActive(propertyId);
             assocationItem = DatabaseHandler.getInstance(getActivity()).getOwnerActive(propertyId);
         }
@@ -292,13 +291,14 @@ public class FragmentOwnerTab extends Fragment implements  View.OnClickListener 
     @Override
     public void onClick(View view) {
 
-        /** Updates the empty table that was created when the user clicks "New Property", and then
+        /**BROKEN not making active Owner...
+         * Updates the empty table that was created when the user clicks "New Property", and then
          *  clicks the "New Owner" option.
          *  When a Property is made, there is a blank table for all relations for that
          *  property. So we do this logic to prevent a blank record when the user performs
          *  the steps: "New Property" and then "New Owner"
          **/
-        if (newOwner && newProperty){
+        if (newProperty){
             updateOwnerFromUI();//Update existing active owner
         }
         /** Stores the current owner in the owner table, but sets that owner's active field

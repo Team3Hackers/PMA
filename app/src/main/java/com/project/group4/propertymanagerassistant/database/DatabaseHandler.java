@@ -183,8 +183,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (success) {
             notifyProviderOnPropertyChange();
         }
-
-
+/** Empty table saves us from null pointer eception when selecting new property **/
+/**Build empty tenant table**/
 
         Tenant tenant = new Tenant();
         tenant.firstName = "";
@@ -196,11 +196,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         tenant.fico ="";
         tenant.tenantActive = "1";
         Long tenantId = db.insert(Tenant.TABLE_NAME, null, tenant.getContent());
-
+/**Build empty tenantactive table**/
         TenantActive currentTenant = new TenantActive();
         currentTenant.id = id;
         currentTenant.idTenant = tenantId;
         db.insert(TenantActive.TABLE_NAME, null, currentTenant.getContent());
+
+
+/**Build empty owner table**/
+
+        Owner owner = new Owner();
+        owner.firstName = "";
+        owner.lastName = "";
+        owner.address = "";
+        owner.city = "";
+        owner.state = "";
+        owner.zip ="";
+        owner.phone ="";
+        owner.ownerActive = "1";
+        Long ownerId = db.insert(Owner.TABLE_NAME, null, owner.getContent());
+/**Build empty owneractive table**/
+        OwnerActive currentOwner = new OwnerActive();
+        currentOwner.id = id;
+        currentOwner.idOwner = ownerId;
+        db.insert(OwnerActive.TABLE_NAME, null, currentOwner.getContent());
 
         return success;
     }
