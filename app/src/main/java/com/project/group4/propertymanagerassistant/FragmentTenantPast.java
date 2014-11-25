@@ -43,8 +43,11 @@ import java.util.ArrayList;
 
 
 
-public class StaticFragment extends ListFragment {
+public class FragmentTenantPast extends ListFragment {
 
+
+    private Long propertyId;
+    private Boolean newProperty;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -52,16 +55,24 @@ public class StaticFragment extends ListFragment {
 
 
         DatabaseHandler db = DatabaseHandler.getInstance(getActivity());
-        Cursor crs = db.getTenantJoinNotActive(getArguments().getLong(PropertyDetailFragment.ARG_ITEM_ID));//propertyId
+        Cursor crs = db.getTenantJoinNotActive(this.propertyId);//propertyId
         ArrayList<String> tenantList = new ArrayList<String>();
-        if (crs != null) {
-            while (crs.moveToNext()) {
 
-                tenantList.add(
-                        crs.getString(crs.getColumnIndex(Tenant.COL_FIRST_NAME)) + " " +
-                                crs.getString(crs.getColumnIndex(Tenant.COL_LAST_NAME))
-                );
+        if(crs != null) {
+
+
+            if (crs != null) {
+                while (crs.moveToNext()) {
+
+                    tenantList.add(
+                            crs.getString(crs.getColumnIndex(Tenant.COL_FIRST_NAME)) + " " +
+                                    crs.getString(crs.getColumnIndex(Tenant.COL_LAST_NAME))
+                    );
+                }
             }
+        }
+        else{
+            tenantList.add("No Past Tenants");
         }
 
         // This is the array adapter, it takes the context of the activity as a
@@ -86,6 +97,20 @@ public class StaticFragment extends ListFragment {
         /** Tap any item to go back **/
         fm.popBackStack ("StaticFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
+
+    /**
+     * Function to pass property arguments to this fragment.
+     * Needed untill we figure out Bundle passing...
+     * @param propertyId
+     *          Thid id the primary key of the property table in database
+     * @param newProperty
+     *          This is true when the user selects the menu option to create new property
+     */
+    public void setPropertyArgs(Long propertyId, Boolean newProperty) {
+        this.propertyId = propertyId;
+        this.newProperty = newProperty;
+    }
 }
+
 
 

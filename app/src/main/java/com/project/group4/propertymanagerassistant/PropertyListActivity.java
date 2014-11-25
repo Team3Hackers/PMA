@@ -133,7 +133,7 @@ public class PropertyListActivity extends FragmentActivity
  */
         //inflater.inflate(R.menu.list_activity_small, menu);
 
-        menu.add(menu.NONE, 1, 1, "Add New Property");
+        menu.add(menu.NONE, 0, 0, "Add New Property");
 
 /**
 

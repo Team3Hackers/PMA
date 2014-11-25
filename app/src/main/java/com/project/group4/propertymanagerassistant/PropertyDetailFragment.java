@@ -3,6 +3,7 @@ package com.project.group4.propertymanagerassistant;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,10 +49,50 @@ public class PropertyDetailFragment extends Fragment{
 
 
        }
+/**----------------**/
+    /**
+     * This OnPageChangeListner is used to listen for tab swipes.
+     * This method is used to create custom fragment lifecycles with the tabs.
+     * Not needed as of yet!
+     */
+    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+
+        int currentPosition = 0;
+
+        @Override
+        public void onPageSelected(int newPosition) {
+
+
+            getActivity().supportInvalidateOptionsMenu();//Call back
+
+            FragmentLifecycle fragmentToHide = (FragmentLifecycle)myTabAdapter.getItem(currentPosition);
+            fragmentToHide.onPauseFragment();
+
+            FragmentLifecycle fragmentToShow = (FragmentLifecycle)myTabAdapter.getItem(newPosition);
+            fragmentToShow.onResumeFragment();
 
 
 
+            currentPosition = newPosition;
+            /**
+             * This method calls the getItemPosition method in TabAdaptor.
+             * I used it to force the fragment to reload, which calls all the textfield code, and
+             * I used it to write to the db
+             */
+            myTabAdapter.notifyDataSetChanged();
+        }
 
+        /**
+         *
+         *methods required with the OnPageChangeListner
+         *
+         */
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) { }
+        public void onPageScrollStateChanged(int arg0) { }
+    };
+
+/**---------------**/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,6 +113,8 @@ public class PropertyDetailFragment extends Fragment{
 
         }
         /** **/
+        //Sets the onPageChangeListner to implement the onpause and onresume
+        viewPager.setOnPageChangeListener(pageChangeListener);//here
         viewPager.setAdapter(myTabAdapter);
 /*Left this in long for clarity
  *replace next 2 lines with {lin1 and 2}

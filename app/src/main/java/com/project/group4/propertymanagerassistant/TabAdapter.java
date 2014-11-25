@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
 
 
 class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepageradptapter
@@ -35,6 +34,11 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
     }
 
 
+
+
+
+
+
     //return current fragment
     @Override
     public Fragment getItem(int i) {
@@ -49,12 +53,12 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
 
             ((FragmentPropertyTab) fragment).setPropertyId(propertyId, newProperty);//Passing property id and property status to the
             break;
-        case 2:
+        case 2://Tenant Tab
 //            if(false)//Call back???
 //            {
             //This is the root view to be replaced by other fragments.
-            fragment = new RootFragment();
-            ((RootFragment) fragment).setPropertyArgs(propertyId, newProperty);
+            fragment = new FragmentTenantRoot();
+            ((FragmentTenantRoot) fragment).setPropertyArgs(propertyId, newProperty, FragmentTenantTab.FRAGMENT_TYPE );
                 //fragment = new FragmentTenantTab();
                 //((FragmentTenantTab) fragment).setPropertyId(propertyId, newProperty);
 //            }
@@ -66,9 +70,11 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
 
             break;
 
-        case 3:
-            fragment = new FragmentOwnerTab();
-            ((FragmentOwnerTab) fragment).setPropertyId(propertyId);//Passing property id to the fragment
+        case 3://Owner tab
+            fragment = new FragmentOwnerRoot();
+            ((FragmentOwnerRoot) fragment).setPropertyArgs(propertyId, newProperty, FragmentOwnerTab.FRAGMENT_TYPE);
+//            fragment = new FragmentOwnerTab();
+//            ((FragmentOwnerTab) fragment).setPropertyId(propertyId);//Passing property id to the fragment
             break;
         case 4:
 
@@ -78,7 +84,7 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
 
          default:
             //Never goes here
-             fragment = new StaticFragment();
+             fragment = new FragmentTenantPast();
 
             break;
         }
@@ -120,6 +126,8 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
     //Simply reloads fragment...
     @Override
     public int getItemPosition(Object object) {
+
+
         return POSITION_NONE;
     }
 

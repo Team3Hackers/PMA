@@ -38,12 +38,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //for ass table
         Long propertyId;
         Long tenantId;
+        Long ownerId;
 
+        /** Build tables **/
         db.execSQL(Property.CREATE_TABLE);
         db.execSQL(Tenant.CREATE_TABLE);
         db.execSQL(TenantActive.CREATE_TABLE);
+        db.execSQL(Owner.CREATE_TABLE);
+        db.execSQL(OwnerActive.CREATE_TABLE);
 
-//building dummy data into database
+        /**
+         * building dummy property #1 into database
+         */
 
         Property property = new Property();
         property.address = "19 Camino Del Oro";
@@ -52,7 +58,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         property.state = "California";
         property.zip = "92688";
 
-      propertyId =  db.insert(Property.TABLE_NAME, null, property.getContent());
+        propertyId =  db.insert(Property.TABLE_NAME, null, property.getContent());
 
 
         Tenant tenant = new Tenant();
@@ -66,13 +72,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         tenant.tenantActive = "1";
         tenantId = db.insert(Tenant.TABLE_NAME, null, tenant.getContent());
 
-//should do query on this to get ids..
+        Owner owner = new Owner();
+        owner.firstName = "Sharon";
+        owner.lastName = "Smith";
+        owner.phone ="(949) 589-1234";
+        owner.address = "123 Legato St.";
+        owner.city = "Laguna Beach";
+        owner.state = "CA";
+        owner.zip = "92123";
+        owner.ownerActive = "1";
+        ownerId = db.insert(Owner.TABLE_NAME, null, owner.getContent());
+
+
         TenantActive currentTenant = new TenantActive();
         currentTenant.id = propertyId;
         currentTenant.idTenant = tenantId;
         db.insert(TenantActive.TABLE_NAME, null, currentTenant.getContent());
 
-//---
+        OwnerActive currentOwner = new OwnerActive();
+        currentOwner.id = propertyId;
+        currentOwner.idOwner = ownerId;
+        db.insert(OwnerActive.TABLE_NAME, null, currentOwner.getContent());
+
+        /**
+         * building dummy property #2 into database
+         */
 
         property.address  = "123 Lucky Street";
         property.city  = "Anytown USA";
@@ -86,18 +110,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         tenant.firstName = "Frank";
         tenant.lastName = "Stephen";
         tenant.address = "12 Pumpkin Lane";
-        tenant.city = "Burbon Lane";
+        tenant.city = "Anytown USA";
         tenant.state = "KY";
         tenant.zip ="13254";
         tenant.fico ="1234";
         tenant.tenantActive = "1";
         tenantId = db.insert(Tenant.TABLE_NAME, null, tenant.getContent());
 
+        owner.firstName = "Frank";
+        owner.lastName = "Wilson";
+        owner.phone ="(222) 222-2222";
+        owner.address = "123 1st Street";
+        owner.city = "Pinole";
+        owner.state = "CA";
+        owner.zip = "91345";
+        owner.ownerActive = "1";
+        ownerId = db.insert(Owner.TABLE_NAME, null, owner.getContent());
 
         currentTenant.id = propertyId;
         currentTenant.idTenant = tenantId;
         db.insert(TenantActive.TABLE_NAME, null, currentTenant.getContent());
 
+        currentOwner.id = propertyId;
+        currentOwner.idOwner = ownerId;
+        db.insert(OwnerActive.TABLE_NAME, null, currentOwner.getContent());
+
+        /** End of dummy build **/
     }
 
 
@@ -273,7 +311,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     /**
      * This query function retrives all non-active tenants from the joint tables tenantactive and tenant
-     * @param Tenant
+     * @param
      * @return
      */
     public synchronized Cursor getTenantJoinNotActive(final long id) {
@@ -433,6 +471,232 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 TenantActiveProvider.URI_TENANT_ACTIVE, null, false);//
     }
     /**--------- End of TENANT --------------**/
+
+    /** Start of Owner **/
+
+    /** ------Owner---------**/
+
+    public synchronized Owner getOwner(final long id) {
+        final SQLiteDatabase db = this.getReadableDatabase();
+        final Cursor cursor = db.query(Owner.TABLE_NAME, Owner.FIELDS,
+                Owner.COL_ID + " IS ?", new String[] { String.valueOf(id) },
+                null, null, null, null);
+        if (cursor == null || cursor.isAfterLast()) {
+            return null;
+        }
+
+        Owner item = null;
+        if (cursor.moveToFirst()) {
+            item = new Owner(cursor);
+        }
+        cursor.close();
+
+
+        return item;
+    }
+
+    /**
+     * getOwner query to get ACTIVE owner. Inner join on owner and active table.
+     * @param id
+     * @return
+     */
+
+    public synchronized Owner getOwnerJoinActive(final long id) {
+        final SQLiteDatabase db = this.getReadableDatabase();
+
+        //Create new querybuilder to query database with a join
+        SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
+        //Specify books table and add join to categories table (use full_id for joining categories table)
+        _QB.setTables(Owner.TABLE_NAME +
+                " INNER JOIN " + OwnerActive.TABLE_NAME + " ON " +
+                Owner.COL_ID + " = " + OwnerActive.COL_OWNER_ID + " WHERE " + OwnerActive.COL_PROPERTY_ID
+                + " = " + String.valueOf(id) + " AND " + Owner.COL_OWNER_ACTIVE + " != 0" );
+
+
+
+        final Cursor cursor = _QB.query(db, null, null, null, null, null, null);
+
+        if (cursor == null || cursor.isAfterLast()) {
+            return null;
+        }
+
+        Owner item = null;
+        if (cursor.moveToFirst()) {
+            item = new Owner(cursor);
+        }
+        cursor.close();
+        return item;
+    }
+
+    /**
+     * This query function retrives all non-active owners from the joint tables owneractive and owner
+     * @param
+     * @return
+     */
+    public synchronized Cursor getOwnerJoinNotActive(final long id) {
+        final SQLiteDatabase db = this.getReadableDatabase();
+
+        //Create new querybuilder to query database with a join
+        SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
+        //Specify books table and add join to categories table (use full_id for joining categories table)
+        _QB.setTables(Owner.TABLE_NAME +
+                " INNER JOIN " + OwnerActive.TABLE_NAME + " ON " +
+                Owner.COL_ID + " = " + OwnerActive.COL_OWNER_ID + " WHERE " + OwnerActive.COL_PROPERTY_ID
+                + " = " + String.valueOf(id) + " AND " + Owner.COL_OWNER_ACTIVE + " = 0" );
+
+
+Log.d("DB::", Owner.TABLE_NAME +
+        " INNER JOIN " + OwnerActive.TABLE_NAME + " ON " +
+        Owner.COL_ID + " = " + OwnerActive.COL_OWNER_ID + " WHERE " + OwnerActive.COL_PROPERTY_ID
+        + " = " + String.valueOf(id) + " AND " + Owner.COL_OWNER_ACTIVE + " = 0");
+        final Cursor cursor = _QB.query(db, null, null, null, null, null, null);
+
+        if (cursor == null || cursor.isAfterLast()) {
+            return null;
+        }
+
+//        Owner item = null;
+//        if (cursor.moveToFirst()) {
+//            item = new Owner(cursor);
+//        }
+        //cursor.close();
+        return cursor;
+    }
+
+
+    //TODO: update this to include the assciation table owner_active
+    public synchronized boolean updateOwner(final Owner Owner) {
+        boolean success = false;
+        int result = 0;
+        final SQLiteDatabase db = this.getWritableDatabase();
+
+        if (Owner.id > -1) {
+            result += db.update(Owner.TABLE_NAME, Owner.getContent(),
+                    Owner.COL_ID + " IS ?",
+                    new String[] { String.valueOf(Owner.id) });
+        }
+
+        if (result > 0) {
+            success = true;
+        }
+        if (success) {
+            notifyProviderOnOwnerChange();
+        }
+
+        return success;
+    }
+
+    //TODO: update this to include the assciation table owner_active
+    public synchronized boolean putOwner(final Owner Owner) {
+        boolean success = false;
+        int result = 0;
+        final SQLiteDatabase db = this.getWritableDatabase();
+/*
+        if (Owner.id > -1) {
+            result += db.update(Owner.TABLE_NAME, Owner.getContent(),
+                    Owner.COL_ID + " IS ?",
+                    new String[] { String.valueOf(Owner.id) });
+        }
+
+        if (result > 0) {
+            success = true;
+        } else {
+*/
+        // insert into table
+        final long id = db.insert(Owner.TABLE_NAME, null,
+                Owner.getContent());
+
+        if (id > -1) {
+            Owner.id = id;//Why do we do this???
+            success = true;
+        }
+//        }
+
+        if (success) {
+            notifyProviderOnOwnerChange();
+        }
+
+        return success;
+    }
+//    //NOT DELETING ANY OWNER!
+//    public synchronized int removeOwner(final Owner Owner) {
+//        final SQLiteDatabase db = this.getWritableDatabase();
+//        final int result = db.delete(Owner.TABLE_NAME,
+//                Owner.COL_ID + " IS ?",
+//                new String[] { Long.toString(Owner.id) });
+//
+//        if (result > 0) {
+//            notifyProviderOnOwnerChange();
+//        }
+//        return result;
+//    }
+    //INCUDE ACCOCIATION TABLE
+    private void notifyProviderOnOwnerChange() {
+        context.getContentResolver().notifyChange(
+                OwnerProvider.URI_OWNER, null, false);//
+    }
+
+    /**--------- End of OWNER --------------**/
+    /**--------- Start OwnerActive ---------**/
+    //TODO: update this to include the assciation table owner_active
+    public synchronized boolean updateOwnerActive(final OwnerActive OwnerActive) {
+        boolean success = false;
+        int result = 0;
+        final SQLiteDatabase db = this.getWritableDatabase();
+// insert into table
+        final long id = db.insert(OwnerActive.TABLE_NAME, null,
+                OwnerActive.getContent());
+
+        if (id > -1) {
+            success = true;
+        }
+//        }
+
+        if (success) {
+                      notifyProviderOnOwnerActiveChange();
+        }
+
+        return success;
+    }
+
+    /**
+     * getOwner query to get ACTIVE owner. Inner join on owner and active table.
+     * @param id
+     * @return
+     */
+
+    public synchronized OwnerActive getOwnerActive(final long id) {
+        final SQLiteDatabase db = this.getReadableDatabase();
+
+
+        final Cursor cursor = db.query(OwnerActive.TABLE_NAME, OwnerActive.FIELDS,
+                OwnerActive.COL_PROPERTY_ID + " IS ?", new String[] { String.valueOf(id) },
+                null, null, null, null);
+
+        //final Cursor cursor = db.query(Owner.TABLE_NAME, Owner.FIELDS,
+        //       Owner.COL_ID + " IS ?", new String[] { String.valueOf(id) },
+        //      null, null, null, null);
+        if (cursor == null || cursor.isAfterLast()) {
+            return null;
+        }
+
+        OwnerActive item = null;
+        if (cursor.moveToFirst()) {
+            item = new OwnerActive(cursor);
+        }
+        cursor.close();
+        return item;
+    }
+
+    private void notifyProviderOnOwnerActiveChange() {
+        context.getContentResolver().notifyChange(
+                OwnerActiveProvider.URI_OWNER_ACTIVE, null, false);//
+    }
+    /**--------- End of OWNER --------------**/
+
+
+
+
 
 }
 

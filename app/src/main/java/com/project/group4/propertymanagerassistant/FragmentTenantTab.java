@@ -2,13 +2,8 @@ package com.project.group4.propertymanagerassistant;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +11,9 @@ import android.support.annotation.Nullable;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.Intent;
-
 
 
 import com.project.group4.propertymanagerassistant.database.DatabaseHandler;
-import com.project.group4.propertymanagerassistant.database.Property;
 import com.project.group4.propertymanagerassistant.database.Tenant;
 import com.project.group4.propertymanagerassistant.database.TenantActive;
 
@@ -30,6 +22,9 @@ import com.project.group4.propertymanagerassistant.database.TenantActive;
  * Created by benhoelzel on 10/26/14.
  */
 public class FragmentTenantTab extends Fragment implements View.OnClickListener {
+
+    public static String FRAGMENT_TYPE = "fragment_tenant_tab";
+
     private Tenant mItem;
     private TenantActive assocationItem;
     private TextView textLastName;
@@ -44,6 +39,13 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
     Boolean newProperty = false;//Default
     Boolean newTenant = false;
     Button saveButton;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -154,24 +156,30 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
     }
 */
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        //Beause the menu is part of the root activity, so when you go through tabs we have delete so
-        //we dont keep adding simalar menu options
-        menu.removeItem(2);
-        menu.removeItem(3);
-        menu.removeItem(4);
-        //
-
-        menu.add(menu.NONE, 2, 2, "Edit Tenant");
-
-        menu.add(menu.NONE, 3, 3, "New Tenant");
-
-        menu.add(menu.NONE, 4, 4, "Past Tenants");
-
-
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        super.onCreateOptionsMenu(menu, inflater);
+//
+//    }
+//
+//    @Override
+//    public void onPrepareOptionsMenu(Menu menu) {
+//        super.onPrepareOptionsMenu(menu);
+//        //Beause the menu is part of the root activity, so when you go through tabs we have delete so
+//        //we dont keep adding simalar menu options
+//        menu.removeItem(2);
+//        menu.removeItem(3);
+//        menu.removeItem(4);
+//        //
+//
+//        menu.add(menu.NONE, 2, 2, "Edit Tenant");
+//
+//        menu.add(menu.NONE, 3, 3, "New Tenant");
+//
+//        menu.add(menu.NONE, 4, 4, "Past Tenants");
+//
+//
+//    }
 
     /**
      * This method is used to take the text fileds and update the database
@@ -233,30 +241,30 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
 //WORKING WITH EDIT ONLY RIGHT NOW, NEED GET THE BUTTON WHEN OUTSIDE ACTIVITY SELECTS NEW PROP
     public boolean onOptionsItemSelected(MenuItem item) {
         saveButton.setVisibility(View.VISIBLE);
-        if (item.getItemId() == 3) {//CAn do a trick here to prevent the empty row, if row is !empty from function, else do edit...
+        if (item.getItemId() == 5) {//CAn do a trick here to prevent the empty row, if row is !empty from function, else do edit...
 
             newTenant = true;//Used as new tenant flag in onClick method
             mItem.tenantActive = "0";//disable old tenants status
             updateTenantFromUI();//Update old tenants status
-        } else {
+        } else if (item.getItemId() == 4){
             newTenant = false;//Not a new tenant, leave active flag alone...
         }
-        if(item.getItemId()==4) {
-            /** Create bundle to send to next fragment **/
-            Bundle arguments = new Bundle();
-            /** Set agruments to pass in pundle **/
-            arguments.putLong(PropertyDetailFragment.ARG_ITEM_ID,
-                    getActivity().getIntent().getLongExtra(PropertyDetailFragment.ARG_ITEM_ID, -1));
-            arguments.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW,
-                    getActivity().getIntent().getBooleanExtra(PropertyDetailFragment.ARG_ITEM_NEW, false/*default*/));
+        if(item.getItemId()==6) {
+//            /** Create bundle to send to next fragment **/
+//            Bundle arguments = new Bundle();
+//            /** Set agruments to pass in pundle **/
+//            arguments.putLong(PropertyDetailFragment.ARG_ITEM_ID,
+//                    getActivity().getIntent().getLongExtra(PropertyDetailFragment.ARG_ITEM_ID, -1));
+//            arguments.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW,
+//                    getActivity().getIntent().getBooleanExtra(PropertyDetailFragment.ARG_ITEM_NEW, false/*default*/));
             /** Get fragment manager from activity **/
             FragmentTransaction trans = getFragmentManager()
                     .beginTransaction();
             /** Build new fragment with arguments **/
-            StaticFragment fragment = new StaticFragment();
-            fragment.setArguments(arguments);
+            FragmentTenantPast fragment = new FragmentTenantPast();
+            fragment.setPropertyArgs(this.propertyId, this.newProperty);
             /** Replace current fragment with newlly created one **/
-            trans.replace(R.id.root_frame, fragment);
+            trans.replace(R.id.tenant_root_frame, fragment);
             trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);//SOWER TRANSITION
             trans.addToBackStack("StaticFragment");
             trans.commit();
@@ -277,6 +285,9 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
          **/
         if (newTenant && newProperty){
             updateTenantFromUI();//Update existing active tenant
+            //not tested!
+            newTenant = false;//The tenant is not new here now
+            newProperty =false;
         }
         /** Stores the current tenant in the tenant table, but sets that tenant's active field
          *  to 0. This is when the property exist with a tenant and the user wants to
@@ -305,8 +316,6 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
 //TODO: DONT ALLOW USER TO SAVE UNTILL CRITIICAL DATA IS INPUTTED!
         Toast.makeText(getActivity(), mItem.firstName + " " + mItem.lastName + " saved to database", Toast.LENGTH_SHORT).show();
     }
-
-
 
 
 }

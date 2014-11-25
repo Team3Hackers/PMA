@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,10 @@ import com.project.group4.propertymanagerassistant.database.Property;
 /**
  * Created by benhoelzel on 10/26/14.
  */
-public class FragmentPropertyTab extends Fragment implements View.OnClickListener {
+
+
+
+public class FragmentPropertyTab extends Fragment implements FragmentLifecycle,  View.OnClickListener {
     private Property mItem;
     private TextView textAddress;
     private TextView textUnit;
@@ -33,6 +37,15 @@ public class FragmentPropertyTab extends Fragment implements View.OnClickListene
     Boolean newProperty = false;
     TextView text;
     Button saveButton;
+
+    private Menu thisMenu;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_property_tab, container, false);
@@ -43,7 +56,6 @@ public class FragmentPropertyTab extends Fragment implements View.OnClickListene
         if(!newProperty)
             saveButton.setVisibility(View.GONE);
 
-        setHasOptionsMenu(true);
 
         if (propertyId != null) {
             // Get property detail from database
@@ -120,12 +132,23 @@ public class FragmentPropertyTab extends Fragment implements View.OnClickListene
     }
 */
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
+
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        menu.removeItem(2);
-        menu.removeItem(3);
-        menu.add(menu.NONE, 2, 2, "Edit");
+//        menu.removeItem(2);
+//        menu.removeItem(3);
+//        menu.removeItem(4);
+        for(int i = 1; i <= 10; i++){
+            menu.removeItem(i);
+        }
+        menu.add(menu.NONE, 3, 3, "Edit");
     }
 
     /**
@@ -160,5 +183,17 @@ public class FragmentPropertyTab extends Fragment implements View.OnClickListene
 
        saveButton.setVisibility(View.GONE);
         Toast.makeText(getActivity(), mItem.address + " saved to database", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPauseFragment() {
+//        this.thisMenu.clear();
+
+    }
+
+    @Override
+    public void onResumeFragment() {
+       //getActivity().invalidateOptionsMenu();
+
     }
 }

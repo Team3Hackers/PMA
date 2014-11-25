@@ -32,6 +32,8 @@ public class PropertyDetailActivity extends FragmentActivity  {
 
 
 
+
+
         setContentView(R.layout.activity_property_detail);
 
         // Show the Up button in the action bar.
