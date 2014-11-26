@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 /**
  * Created by benhoelzel on 10/26/14.
  */
-public class FragmentTransactionTab extends Fragment implements FragmentLifecycle {
+public class FragmentTransactionTab extends Fragment/* implements FragmentLifecycle*/ {
 
     private Menu thisMenu;
 
@@ -41,41 +41,27 @@ public class FragmentTransactionTab extends Fragment implements FragmentLifecycl
         for(int i = 1; i <= 10; i++){
             menu.removeItem(i);
         }
-//        menu.removeItem(2);
-//        menu.removeItem(3);
-//        menu.removeItem(4);
+
         menu.add(menu.NONE, 1, 1, "Edit");
         menu.add(menu.NONE, 2, 2, "New");
     }
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        super.onCreateOptionsMenu(menu, inflater);
-//        if ( 1 == menu.size() ){//MUST BE IN 2 PANE MODE
-//            menu.removeItem(2);
-//            menu.add(menu.NONE, 2, 2, "Edit");
-//        }
-//        else{//IN SINGLE PANE MODE
-//            menu.clear();
-//            menu.add(menu.NONE, 2, 2, "Edit");
-//        }
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d("FragmentTransactionsTab", "onOptionsItemSelected");
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public void onPauseFragment() {
-
-        Log.d("FragTransTab" + " ", "onPausedFragment");
-    }
-
-    @Override
-    public void onResumeFragment() {
-        Log.d("FragTransTab" + " ", "onResumeFragment");
-    }
+//
+//    @Override
+//    public void onPauseFragment() {
+//
+//        Log.d("FragTransTab" + " ", "onPausedFragment");
+//    }
+//
+//    @Override
+//    public void onResumeFragment() {
+//        Log.d("FragTransTab" + " ", "onResumeFragment");
+//    }
 
 
 }

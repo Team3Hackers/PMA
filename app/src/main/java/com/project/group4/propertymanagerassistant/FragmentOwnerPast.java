@@ -30,6 +30,20 @@ public class FragmentOwnerPast extends ListFragment {
     private Boolean newProperty;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState!=null){//On a rotation, may not do this, root will give this.
+//            Maybe I am doing this to get a item??
+            propertyId = savedInstanceState.getLong(PropertyDetailFragment.ARG_ITEM_ID);
+            newProperty = savedInstanceState.getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
+        }
+        else{
+            propertyId = getArguments().getLong(PropertyDetailFragment.ARG_ITEM_ID);
+            newProperty = getArguments().getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
+        }
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -74,11 +88,6 @@ public class FragmentOwnerPast extends ListFragment {
 
         /** Tap any item to go back **/
         fm.popBackStack ("FragmentOwnerPast", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-    }
-
-    public void setPropertyArgs(Long propertyId, Boolean newProperty) {
-        this.propertyId = propertyId;
-        this.newProperty = newProperty;
     }
 
 }

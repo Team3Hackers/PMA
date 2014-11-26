@@ -3,6 +3,7 @@ package com.project.group4.propertymanagerassistant;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +27,7 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
     public static String FRAGMENT_TYPE = "fragment_tenant_tab";
 
     private Tenant mItem;
+    private Tenant tempItem;
     private TenantActive assocationItem;
     private TextView textLastName;
     private TextView textFirstName;
@@ -44,6 +46,15 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        if (savedInstanceState!=null){//On a rotation, may not do this, root will give this.
+//            Maybe I am doing this to get a item??
+            propertyId = savedInstanceState.getLong(PropertyDetailFragment.ARG_ITEM_ID);
+            newProperty = savedInstanceState.getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
+        }
+        else{
+            propertyId = getArguments().getLong(PropertyDetailFragment.ARG_ITEM_ID);
+            newProperty = getArguments().getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
+        }
 
     }
 
@@ -130,20 +141,12 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
      * @param newProperty
      *          This is true when the user selects the menu option to create new property
      */
-    public void setPropertyArgs(Long propertyId, Boolean newProperty) {
-        this.propertyId = propertyId;
-        this.newProperty = newProperty;
-    }
+//    public void setPropertyArgs(Long propertyId, Boolean newProperty) {
+//        this.propertyId = propertyId;
+//        this.newProperty = newProperty;
+//    }
 
 
-
-    //MAYNOT NEED RIGHT NOW
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
-    }
 
 
 
@@ -241,28 +244,33 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
 //WORKING WITH EDIT ONLY RIGHT NOW, NEED GET THE BUTTON WHEN OUTSIDE ACTIVITY SELECTS NEW PROP
     public boolean onOptionsItemSelected(MenuItem item) {
         saveButton.setVisibility(View.VISIBLE);
-        if (item.getItemId() == 5) {//CAn do a trick here to prevent the empty row, if row is !empty from function, else do edit...
+        if (item.getItemId() == 5) {
 
             newTenant = true;//Used as new tenant flag in onClick method
-            mItem.tenantActive = "0";//disable old tenants status
-            updateTenantFromUI();//Update old tenants status
+            tempItem = mItem;//Copy existing tenant...
+
+//            mItem.tenantActive = "0";//disable old tenants status
+//            updateTenantFromUI();//Update old tenants status
+
+
+
+
         } else if (item.getItemId() == 4){
             newTenant = false;//Not a new tenant, leave active flag alone...
         }
-        if(item.getItemId()==6) {
-//            /** Create bundle to send to next fragment **/
-//            Bundle arguments = new Bundle();
-//            /** Set agruments to pass in pundle **/
-//            arguments.putLong(PropertyDetailFragment.ARG_ITEM_ID,
-//                    getActivity().getIntent().getLongExtra(PropertyDetailFragment.ARG_ITEM_ID, -1));
-//            arguments.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW,
-//                    getActivity().getIntent().getBooleanExtra(PropertyDetailFragment.ARG_ITEM_NEW, false/*default*/));
+        if(item.getItemId()==6) {//get past, no db change
+            /** Create bundle to send to next fragment **/
+            Bundle args = new Bundle();
+            /** Set agruments to pass in pundle **/
+            args.putLong(PropertyDetailFragment.ARG_ITEM_ID, propertyId);
+            args.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW,newProperty);
             /** Get fragment manager from activity **/
             FragmentTransaction trans = getFragmentManager()
                     .beginTransaction();
             /** Build new fragment with arguments **/
             FragmentTenantPast fragment = new FragmentTenantPast();
-            fragment.setPropertyArgs(this.propertyId, this.newProperty);
+            fragment.setArguments(args);
+// fragment.setPropertyArgs(this.propertyId, this.newProperty);
             /** Replace current fragment with newlly created one **/
             trans.replace(R.id.tenant_root_frame, fragment);
             trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);//SOWER TRANSITION
@@ -277,7 +285,7 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
     @Override
     public void onClick(View view) {
 
-        /** BROKEN: Not making active Tenant
+        /**
          *  Updates the empty table that was created when the user clicks "New Property", and then
          *  clicks the "New Tenant" option.
          *  When a Property is made, there is a blank table for all relations for that
@@ -295,11 +303,10 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
          *  This way we can track all past tenants.
          */
         else if (newTenant) {//old property, new tenant
-
-
+            tempItem.tenantActive= "0";
+            DatabaseHandler.getInstance(getActivity()).updateTenant(tempItem);//update old tenant
             insertTenantFromUI();//Insert new tenant
-            insertTenantActiveInFragment();
-
+            insertTenantActiveInFragment();//insert new asscoation
             newTenant = false;//The tenant is not new here now
         }
         /** This case is when the user selects  for updating the current tenant.
@@ -317,5 +324,26 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
         Toast.makeText(getActivity(), mItem.firstName + " " + mItem.lastName + " saved to database", Toast.LENGTH_SHORT).show();
     }
 
-
+//works,but the last data item is never changed and we end up with dupliates and fails rotate
+    //need to set aside temp and then do work not touching the db untill save is pressed...
+    //If save is open and rotate or slide past happens, then we save instance
+    //Here we would not do much??
+    //Just save state in save instance and only touch db when save happens...
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//       if(saveButton.getVisibility() == View.VISIBLE && newTenant) {
+//           insertTenantFromUI();
+//           insertTenantActiveInFragment();
+//           newTenant = false;
+//       }
+//       else if (saveButton.getVisibility() == View.VISIBLE && newProperty){
+//           updateTenantFromUI();
+//           newProperty = false;
+//       }
+//       else{
+//           updateTenantFromUI();
+//       }
+//
+//    }
 }

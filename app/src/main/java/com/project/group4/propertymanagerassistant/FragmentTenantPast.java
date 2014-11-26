@@ -50,6 +50,20 @@ public class FragmentTenantPast extends ListFragment {
     private Boolean newProperty;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState!=null){//On a rotation, may not do this, root will give this.
+//            Maybe I am doing this to get a item??
+            propertyId = savedInstanceState.getLong(PropertyDetailFragment.ARG_ITEM_ID);
+            newProperty = savedInstanceState.getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
+        }
+        else{
+            propertyId = getArguments().getLong(PropertyDetailFragment.ARG_ITEM_ID);
+            newProperty = getArguments().getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
+        }
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -98,18 +112,18 @@ public class FragmentTenantPast extends ListFragment {
         fm.popBackStack ("StaticFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
-    /**
-     * Function to pass property arguments to this fragment.
-     * Needed untill we figure out Bundle passing...
-     * @param propertyId
-     *          Thid id the primary key of the property table in database
-     * @param newProperty
-     *          This is true when the user selects the menu option to create new property
-     */
-    public void setPropertyArgs(Long propertyId, Boolean newProperty) {
-        this.propertyId = propertyId;
-        this.newProperty = newProperty;
-    }
+//    /**
+//     * Function to pass property arguments to this fragment.
+//     * Needed untill we figure out Bundle passing...
+//     * @param propertyId
+//     *          Thid id the primary key of the property table in database
+//     * @param newProperty
+//     *          This is true when the user selects the menu option to create new property
+//     */
+//    public void setPropertyArgs(Long propertyId, Boolean newProperty) {
+//        this.propertyId = propertyId;
+//        this.newProperty = newProperty;
+//    }
 }
 
 

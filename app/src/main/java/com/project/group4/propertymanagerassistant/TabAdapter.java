@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 
 class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepageradptapter
@@ -20,7 +21,7 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
     Boolean newProperty;
 
     //
-    Bundle bundle = new Bundle();
+    Bundle bundle;
 
 
     //base constructor
@@ -30,7 +31,7 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
 
 
     public void SetBundle( Bundle args) {
-        bundle = args;
+        this.bundle = args;
     }
 
 
@@ -58,7 +59,7 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
 //            {
             //This is the root view to be replaced by other fragments.
             fragment = new FragmentTenantRoot();
-            ((FragmentTenantRoot) fragment).setPropertyArgs(propertyId, newProperty, FragmentTenantTab.FRAGMENT_TYPE );
+//            ((FragmentTenantRoot) fragment).setPropertyArgs(propertyId, newProperty, FragmentTenantTab.FRAGMENT_TYPE );
                 //fragment = new FragmentTenantTab();
                 //((FragmentTenantTab) fragment).setPropertyId(propertyId, newProperty);
 //            }
@@ -72,7 +73,7 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
 
         case 3://Owner tab
             fragment = new FragmentOwnerRoot();
-            ((FragmentOwnerRoot) fragment).setPropertyArgs(propertyId, newProperty, FragmentOwnerTab.FRAGMENT_TYPE);
+//            ((FragmentOwnerRoot) fragment).setPropertyArgs(propertyId, newProperty, FragmentOwnerTab.FRAGMENT_TYPE);
 //            fragment = new FragmentOwnerTab();
 //            ((FragmentOwnerTab) fragment).setPropertyId(propertyId);//Passing property id to the fragment
             break;
@@ -88,8 +89,6 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
 
             break;
         }
-        //bundle.putBoolean("new_property", newProperty);
-        //bundle.putLong("item_id", propertyId);
 
         fragment.setArguments(this.bundle);
         return fragment;

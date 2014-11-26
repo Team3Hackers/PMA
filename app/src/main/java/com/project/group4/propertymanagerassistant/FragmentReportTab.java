@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 /**
  * Created by benhoelzel on 10/26/14.
  */
-public class FragmentReportTab extends Fragment implements  FragmentLifecycle{
+public class FragmentReportTab extends Fragment /*implements  FragmentLifecycle*/{
 
     private Menu thisMenu;
 
@@ -38,26 +38,13 @@ public class FragmentReportTab extends Fragment implements  FragmentLifecycle{
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-//        menu.removeItem(2);
-//        menu.removeItem(3);
-//        menu.removeItem(4);
+
         for(int i = 1; i <= 10; i++){
             menu.removeItem(i);
         }
         menu.add(menu.NONE, 10, 10, "Edit");
     }
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        super.onCreateOptionsMenu(menu, inflater);
-//        if ( 1 == menu.size() ){//MUST BE IN 2 PANE MODE
-//            menu.removeItem(2);
-//            menu.add(menu.NONE, 2, 2, "Edit");
-//        }
-//        else{//IN SINGLE PANE MODE
-//          //  menu.clear();
-//            menu.add(menu.NONE, 2, 2, "Edit");
-//        }
-//    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -65,13 +52,13 @@ public class FragmentReportTab extends Fragment implements  FragmentLifecycle{
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onPauseFragment() {
-
-    }
-
-    @Override
-    public void onResumeFragment() {
-
-    }
+//    @Override
+//    public void onPauseFragment() {
+//
+//    }
+//
+//    @Override
+//    public void onResumeFragment() {
+//
+//    }
 }

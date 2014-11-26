@@ -63,13 +63,13 @@ public class PropertyDetailFragment extends Fragment{
         public void onPageSelected(int newPosition) {
 
 
-            getActivity().supportInvalidateOptionsMenu();//Call back
-
-            FragmentLifecycle fragmentToHide = (FragmentLifecycle)myTabAdapter.getItem(currentPosition);
-            fragmentToHide.onPauseFragment();
-
-            FragmentLifecycle fragmentToShow = (FragmentLifecycle)myTabAdapter.getItem(newPosition);
-            fragmentToShow.onResumeFragment();
+            getActivity().supportInvalidateOptionsMenu();//Call back to call update to menu options every page swipe
+//
+//            FragmentLifecycle fragmentToHide = (FragmentLifecycle)myTabAdapter.getItem(currentPosition);
+//            fragmentToHide.onPauseFragment();
+//
+//            FragmentLifecycle fragmentToShow = (FragmentLifecycle)myTabAdapter.getItem(newPosition);
+//            fragmentToShow.onResumeFragment();
 
 
 
@@ -79,7 +79,7 @@ public class PropertyDetailFragment extends Fragment{
              * I used it to force the fragment to reload, which calls all the textfield code, and
              * I used it to write to the db
              */
-            myTabAdapter.notifyDataSetChanged();
+         //   myTabAdapter.notifyDataSetChanged();
         }
 
         /**
@@ -112,6 +112,11 @@ public class PropertyDetailFragment extends Fragment{
             myTabAdapter.setId(getArguments().getLong(ARG_ITEM_ID), getArguments().getBoolean(ARG_ITEM_NEW));//Send ID to adaptor to have the property id for all fragments
 
         }
+        //or...
+        Bundle args = new Bundle();
+        args.putLong(ARG_ITEM_ID,getArguments().getLong(ARG_ITEM_ID));
+        args.putBoolean(ARG_ITEM_NEW, getArguments().getBoolean(ARG_ITEM_NEW));
+        myTabAdapter.SetBundle(args);
         /** **/
         //Sets the onPageChangeListner to implement the onpause and onresume
         viewPager.setOnPageChangeListener(pageChangeListener);//here

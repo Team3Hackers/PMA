@@ -23,7 +23,7 @@ import com.project.group4.propertymanagerassistant.database.Property;
 
 
 
-public class FragmentPropertyTab extends Fragment implements FragmentLifecycle,  View.OnClickListener {
+public class FragmentPropertyTab extends Fragment implements /*FragmentLifecycle,*/  View.OnClickListener {
     private Property mItem;
     private TextView textAddress;
     private TextView textUnit;
@@ -185,15 +185,15 @@ public class FragmentPropertyTab extends Fragment implements FragmentLifecycle, 
         Toast.makeText(getActivity(), mItem.address + " saved to database", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onPauseFragment() {
-//        this.thisMenu.clear();
-
-    }
-
-    @Override
-    public void onResumeFragment() {
-       //getActivity().invalidateOptionsMenu();
-
-    }
+//    @Override
+//    public void onPauseFragment() {
+////        this.thisMenu.clear();
+//
+//    }
+//
+//    @Override
+//    public void onResumeFragment() {
+//       //getActivity().invalidateOptionsMenu();
+//
+//    }
 }

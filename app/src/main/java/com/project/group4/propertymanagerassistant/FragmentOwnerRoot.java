@@ -10,6 +10,8 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.project.group4.propertymanagerassistant.database.Property;
+
 /**
  * Example about replacing fragments inside a ViewPager. I'm using
  * android-support-v7 to maximize the compatibility.
@@ -17,7 +19,7 @@ import android.view.ViewGroup;
  * @author Dani Lao (@dani_lao)
  * 
  */
-public class FragmentOwnerRoot extends Fragment implements FragmentLifecycle {
+public class FragmentOwnerRoot extends Fragment /*implements FragmentLifecycle*/ {
 
 	private static final String TAG = "RootFragment";
 
@@ -29,25 +31,33 @@ public class FragmentOwnerRoot extends Fragment implements FragmentLifecycle {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+       if(savedInstanceState!=null) {//For saved state
+           propertyId = savedInstanceState.getLong(PropertyDetailFragment.ARG_ITEM_ID);
+           newProperty = savedInstanceState.getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
+       }
+       else{//New enrty to fragment
+            propertyId = getArguments().getLong(PropertyDetailFragment.ARG_ITEM_ID);
+            newProperty = getArguments().getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
+       }
     }
 
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
 		/* Inflate the layout for this fragment */
 		View view = inflater.inflate(R.layout.root_fragment_owner, container, false);
 
 		FragmentTransaction transaction = getFragmentManager()
 				.beginTransaction();
-		/*
-		 * When this container fragment is created, we fill it with our first
-		 * "real" fragment
-		 */
 
+                Bundle args = new Bundle();
+            args.putLong(PropertyDetailFragment.ARG_ITEM_ID, propertyId);
+            args.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW, newProperty);
 
 
             FragmentOwnerTab owner = new FragmentOwnerTab();
-            owner.setPropertyArgs(this.propertyId, this.newProperty);
+            owner.setArguments(args);
             transaction.replace(R.id.owner_root_frame, owner);
 
 
@@ -59,35 +69,10 @@ public class FragmentOwnerRoot extends Fragment implements FragmentLifecycle {
 		return view;
 	}
 
-    /**
-     * Function to pass property arguments to this fragment.
-     * Needed untill we figure out Bundle passing...
-     * @param propertyId
-     *          Thid id the primary key of the property table in database
-     * @param newProperty
-     *          This is true when the user selects the menu option to create new property
-     */
-    public void setPropertyArgs(Long propertyId, Boolean newProperty, String incomingFragentType) {
-        this.propertyId = propertyId;
-        this.newProperty = newProperty;
-        this.fragmentType = incomingFragentType;
-    }
-
-    @Override
-    public void onPauseFragment() { }
-
-    @Override
-    public void onResumeFragment() { }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        //Beause the menu is part of the root activity, so when you go through tabs we have delete so
-        //we dont keep adding simalar menu options
-//        menu.removeItem(2);
-//        menu.removeItem(3);
-//        menu.removeItem(4);
-        //
         for(int i = 1; i <= 10; i++){
             menu.removeItem(i);
         }
@@ -100,16 +85,19 @@ public class FragmentOwnerRoot extends Fragment implements FragmentLifecycle {
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
 
-//    /**
-//     * NOT NEEDED HERE
-//     *
-//     */
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putBoolean("new_property", newProperty);
-//        outState.putLong("item_id", propertyId);
-//        Log.d("Does This Ever Work?", "No, because tabs dont have the same life cycle");
-//    }
+    /**
+     *For rotation
+     *
+     */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(PropertyDetailFragment.ARG_ITEM_ID, propertyId);
+        outState.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW, newProperty);
+    }
 }

@@ -27,6 +27,7 @@ public class FragmentOwnerTab extends Fragment implements  View.OnClickListener 
     public static String FRAGMENT_TYPE = "fragment_owner_tab";
     private Menu thisMenu;
     private Owner mItem;
+    private Owner tempItem;
     private OwnerActive assocationItem;
     private TextView textLastName;
     private TextView textFirstName;
@@ -36,19 +37,30 @@ public class FragmentOwnerTab extends Fragment implements  View.OnClickListener 
     private TextView textZip;
     private TextView textPhone;
 
-    Long propertyId;///Using this as a test, before we get to transaction tables. REFACTOR WHEN WOKRING
+    Long propertyId;
     Boolean newProperty = false;//Default
     Boolean newOwner = false;
     Button saveButton;
 
-    Bundle arguments;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);//notify fragment it has option menu
         /****/
-        arguments = savedInstanceState;
+
+        if (savedInstanceState!=null){//On a rotation, may not do this, root will give this.
+
+            propertyId = savedInstanceState.getLong(PropertyDetailFragment.ARG_ITEM_ID);
+            newProperty = savedInstanceState.getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
+        }
+        else{
+            propertyId = getArguments().getLong(PropertyDetailFragment.ARG_ITEM_ID);
+            newProperty = getArguments().getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
+        }
+
+
 
 
     }
@@ -128,66 +140,6 @@ public class FragmentOwnerTab extends Fragment implements  View.OnClickListener 
     }
 
 
-    /**
-     * Function to pass property arguments to this fragment.
-     * Needed untill we figure out Bundle passing...
-     * @param propertyId
-     *          Thid id the primary key of the property table in database
-     * @param newProperty
-     *          This is true when the user selects the menu option to create new property
-     */
-    public void setPropertyArgs(Long propertyId, Boolean newProperty) {
-        this.propertyId = propertyId;
-        this.newProperty = newProperty;
-    }
-
-
-
-    //MAYNOT NEED RIGHT NOW
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-
-        super.onActivityCreated(savedInstanceState);
-
-
-    }
-
-
-
-
-    /*
-    //Testing to insure we got the correct property ID, we do need to make sure stuff is good before we acces the text view. Because we call this from adaptor, the view is not creting
-    public void setPropertyId(String data){
-        this.propertyId = data;//setting the string
-        Log.d("FragmentOwnerTab", "Here now, with " + data);//testing
-    }
-*/
-
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        super.onCreateOptionsMenu(menu, inflater);
-//
-//
-//    }
-
-//        @Override
-//    public void onPrepareOptionsMenu(Menu menu) {
-//        super.onPrepareOptionsMenu(menu);
-//        //Beause the menu is part of the root activity, so when you go through tabs we have delete so
-//        //we dont keep adding simalar menu options
-//        menu.removeItem(2);
-//        menu.removeItem(3);
-//        menu.removeItem(4);
-//        //
-//
-//        menu.add(menu.NONE, 2, 2, "Edit Owner");
-//
-//        menu.add(menu.NONE, 3, 3, "New Owner");
-//
-//        menu.add(menu.NONE, 4, 4, "Past Owner");
-//
-//
-//    }
 
     /**
      * This method is used to take the text fileds and update the database
@@ -244,47 +196,36 @@ public class FragmentOwnerTab extends Fragment implements  View.OnClickListener 
         // }
     }
 
-    //WHEN NEW PROPERTY, NEW OR EDIT OWNER IS BROKEN! MAYBE WE QUERY INSTEAD OF BOOL??
     @Override
-//WORKING WITH EDIT ONLY RIGHT NOW, NEED GET THE BUTTON WHEN OUTSIDE ACTIVITY SELECTS NEW PROP
     public boolean onOptionsItemSelected(MenuItem item) {
         saveButton.setVisibility(View.VISIBLE);
-        if (item.getItemId() == 8) {//CAn do a trick here to prevent the empty row, if row is !empty from function, else do edit...
 
-            newOwner = true;//Used as new owner flag in onClick method
-            mItem.ownerActive = "0";//disable old owners status
-            updateOwnerFromUI();//Update old owners status
-
-        } else if (item.getItemId()==7) {
+        if (item.getItemId()==7) {
             newOwner = false;//Not a new owner, leave active flag alone...
         }
-        /**GET THIS WORKING LATER**/
-        if(item.getItemId()==9) {
+        else if (item.getItemId() == 8) {
+            newOwner = true;//Used as new owner flag in onClick method
+            tempItem = mItem;
+            //mItem.ownerActive = "0";//disable old owners status
+            //updateOwnerFromUI();//Update old owners status
+        }
+        else if(item.getItemId()==9) {
             /** Create bundle to send to next fragment **/
-            //Bundle arguments = new Bundle();
-//            /** Set agruments to pass in pundle **/
-//            arguments.putLong(PropertyDetailFragment.ARG_ITEM_ID,
-//                    getActivity().getIntent().getLongExtra(PropertyDetailFragment.ARG_ITEM_ID, -1)
-//            );
-//
-            Log.d("ItemSel", "::" + getActivity().getIntent().getLongExtra(PropertyDetailFragment.ARG_ITEM_ID, -1) );
-//
-//            arguments.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW,
-//                    getActivity().getIntent().getBooleanExtra(PropertyDetailFragment.ARG_ITEM_NEW, false/*default*/));
+            Bundle args = new Bundle();
+            args.putLong(PropertyDetailFragment.ARG_ITEM_ID, propertyId);
+            args.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW, newProperty);
             /** Get fragment manager from activity **/
             FragmentTransaction trans = getFragmentManager()
                     .beginTransaction();
             /** Build new fragment with arguments **/
             FragmentOwnerPast fragment = new FragmentOwnerPast();
-            fragment.setPropertyArgs(this.propertyId, this.newProperty);
+            fragment.setArguments(args);
             /** Replace current fragment with newlly created one **/
             trans.replace(R.id.owner_root_frame, fragment);
             trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);//SOWER TRANSITION
             trans.addToBackStack("FragmentOwnerPast");
             trans.commit();
-
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -307,11 +248,10 @@ public class FragmentOwnerTab extends Fragment implements  View.OnClickListener 
          *  This way we can track all past owners.
          */
         else if (newOwner) {//old property, new owner
-
-
+            tempItem.ownerActive = "0";
+            DatabaseHandler.getInstance(getActivity()).updateOwner(tempItem);//update old owner
             insertOwnerFromUI();//Insert new owner
             insertOwnerActiveInFragment();
-
             newOwner = false;//The owner is not new here now
         }
         /** This case is when the user selects  for updating the current owner.
@@ -329,5 +269,32 @@ public class FragmentOwnerTab extends Fragment implements  View.OnClickListener 
         Toast.makeText(getActivity(), mItem.firstName + " " + mItem.lastName + " saved to database", Toast.LENGTH_SHORT).show();
     }
 
+    //works,but the last data item is never changed and we end up with dupliates
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        Log.d("OwnerTab", "::paused");
+//        if(saveButton.getVisibility() == View.VISIBLE && newOwner) {
+//            insertOwnerFromUI();
+//            insertOwnerActiveInFragment();
+//            newOwner = false;
+//        }
+//        else if (saveButton.getVisibility() == View.VISIBLE && newProperty){
+//            updateOwnerFromUI();
+//            newProperty = false;
+//        }
+//        else{
+//            updateOwnerFromUI();
+//        }
+//
+//    }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(PropertyDetailFragment.ARG_ITEM_ID, propertyId);
+        outState.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW, newProperty);
+
+
+    }
 }
