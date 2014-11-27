@@ -303,7 +303,7 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
          *  This way we can track all past tenants.
          */
         else if (newTenant) {//old property, new tenant
-            tempItem.tenantActive= "0";
+            tempItem.tenantActive= "0";//Change status to non-active
             DatabaseHandler.getInstance(getActivity()).updateTenant(tempItem);//update old tenant
             insertTenantFromUI();//Insert new tenant
             insertTenantActiveInFragment();//insert new asscoation
