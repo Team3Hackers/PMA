@@ -46,6 +46,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(TenantActive.CREATE_TABLE);
         db.execSQL(Owner.CREATE_TABLE);
         db.execSQL(OwnerActive.CREATE_TABLE);
+        db.execSQL(PropertyTransaction.CREATE_TABLE);
 
         /**
          * building dummy property #1 into database
@@ -59,6 +60,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         property.zip = "92688";
 
         propertyId =  db.insert(Property.TABLE_NAME, null, property.getContent());
+
+
 
 
         Tenant tenant = new Tenant();
@@ -93,6 +96,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         currentOwner.id = propertyId;
         currentOwner.idOwner = ownerId;
         db.insert(OwnerActive.TABLE_NAME, null, currentOwner.getContent());
+
+        PropertyTransaction propertyTransaction = new PropertyTransaction();
+        propertyTransaction.property = propertyId;
+        propertyTransaction.amount = "50.00";
+        propertyTransaction.category = "Maintenance";
+        propertyTransaction.date = "5/1/14";
+        propertyTransaction.payee = "Al's Gardening";
+        propertyTransaction.note = "Monthly yard maintenance";
+        db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
+
+
+
 
         /**
          * building dummy property #2 into database
@@ -135,6 +150,82 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         currentOwner.idOwner = ownerId;
         db.insert(OwnerActive.TABLE_NAME, null, currentOwner.getContent());
 
+        propertyTransaction.property  = propertyId;
+        propertyTransaction.amount = "1500.00";
+        propertyTransaction.category = "Repair";
+        propertyTransaction.date = "10/14/14";
+        propertyTransaction.payee = "Plumbers are us";
+        propertyTransaction.note = "Water heater replacment";
+        db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
+
+
+        propertyTransaction.property = propertyId;
+        propertyTransaction.amount = "50.00";
+        propertyTransaction.category = "Maintenance";
+        propertyTransaction.date = "5/1/14";
+        propertyTransaction.payee = "Smith's Gardening";
+        propertyTransaction.note = "Monthly yard maintenance";
+        db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
+
+        propertyTransaction.property = propertyId;
+        propertyTransaction.amount = "50.00";
+        propertyTransaction.category = "Maintenance";
+        propertyTransaction.date = "5/1/14";
+        propertyTransaction.payee = "Margo's Gardening";
+        propertyTransaction.note = "Monthly yard maintenance";
+        db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
+
+
+        propertyTransaction.property = propertyId;
+        propertyTransaction.amount = "50.00";
+        propertyTransaction.category = "Maintenance";
+        propertyTransaction.date = "5/1/14";
+        propertyTransaction.payee = "Rusty's Gardening";
+        propertyTransaction.note = "Monthly yard maintenance";
+        db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
+
+        propertyTransaction.property = propertyId;
+        propertyTransaction.amount = "50.00";
+        propertyTransaction.category = "Maintenance";
+        propertyTransaction.date = "5/1/14";
+        propertyTransaction.payee = "Billy's Gardening";
+        propertyTransaction.note = "Monthly yard maintenance";
+        db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
+
+        propertyTransaction.property = propertyId;
+        propertyTransaction.amount = "50.00";
+        propertyTransaction.category = "Maintenance";
+        propertyTransaction.date = "5/1/14";
+        propertyTransaction.payee = "Nick's Gardening";
+        propertyTransaction.note = "Monthly yard maintenance";
+        db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
+
+
+        propertyTransaction.property = propertyId;
+        propertyTransaction.amount = "50.00";
+        propertyTransaction.category = "Maintenance";
+        propertyTransaction.date = "5/1/14";
+        propertyTransaction.payee = "George's Gardening";
+        propertyTransaction.note = "Monthly yard maintenance";
+        db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
+
+
+        propertyTransaction.property = propertyId;
+        propertyTransaction.amount = "50.00";
+        propertyTransaction.category = "Maintenance";
+        propertyTransaction.date = "5/1/14";
+        propertyTransaction.payee = "Franks's Gardening";
+        propertyTransaction.note = "Monthly yard maintenance";
+        db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
+
+        propertyTransaction.property = propertyId;
+        propertyTransaction.amount = "50.00";
+        propertyTransaction.category = "Maintenance";
+        propertyTransaction.date = "5/1/14";
+        propertyTransaction.payee = "Bob's Gardening";
+        propertyTransaction.note = "Monthly yard maintenance";
+        db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
+
         /** End of dummy build **/
     }
 
@@ -164,7 +255,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return item;
     }
 
-    /****TESTING****/
+    /** **/
     public synchronized boolean putNewProperty(final Property property) {
         boolean success = false;
         int result = 0;
@@ -183,8 +274,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (success) {
             notifyProviderOnPropertyChange();
         }
-/** Empty table saves us from null pointer eception when selecting new property **/
-/**Build empty tenant table**/
+/** Empty table saves us from null pointer exception when selecting new property **/
+/**Build empty tenant table for current property **/
 
         Tenant tenant = new Tenant();
         tenant.firstName = "";
@@ -196,14 +287,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         tenant.fico ="";
         tenant.tenantActive = "1";
         Long tenantId = db.insert(Tenant.TABLE_NAME, null, tenant.getContent());
-/**Build empty tenantactive table**/
+
+/**Build empty tenantactive table for current property **/
+
         TenantActive currentTenant = new TenantActive();
         currentTenant.id = id;
         currentTenant.idTenant = tenantId;
         db.insert(TenantActive.TABLE_NAME, null, currentTenant.getContent());
 
-
-/**Build empty owner table**/
+/**Build empty owner table for current property **/
 
         Owner owner = new Owner();
         owner.firstName = "";
@@ -215,11 +307,24 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         owner.phone ="";
         owner.ownerActive = "1";
         Long ownerId = db.insert(Owner.TABLE_NAME, null, owner.getContent());
-/**Build empty owneractive table**/
+
+/**Build empty owneractive table for current property **/
+
         OwnerActive currentOwner = new OwnerActive();
         currentOwner.id = id;
         currentOwner.idOwner = ownerId;
         db.insert(OwnerActive.TABLE_NAME, null, currentOwner.getContent());
+
+/** Build empty property transaction for current property **/
+
+        PropertyTransaction trans = new PropertyTransaction();
+        trans.amount ="";
+        trans.category = "";
+        trans.date = "";
+        trans.note = "";
+        trans.payee = "";
+        trans.property = id;
+
 
         return success;
     }
@@ -564,10 +669,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + " = " + String.valueOf(id) + " AND " + Owner.COL_OWNER_ACTIVE + " = 0" );
 
 
-Log.d("DB::", Owner.TABLE_NAME +
-        " INNER JOIN " + OwnerActive.TABLE_NAME + " ON " +
-        Owner.COL_ID + " = " + OwnerActive.COL_OWNER_ID + " WHERE " + OwnerActive.COL_PROPERTY_ID
-        + " = " + String.valueOf(id) + " AND " + Owner.COL_OWNER_ACTIVE + " = 0");
         final Cursor cursor = _QB.query(db, null, null, null, null, null, null);
 
         if (cursor == null || cursor.isAfterLast()) {
@@ -713,6 +814,99 @@ Log.d("DB::", Owner.TABLE_NAME +
     }
     /**--------- End of OWNER --------------**/
 
+/** Transaction **/
+
+
+    public synchronized Cursor getPropertyTransaction(final long id) {
+        final SQLiteDatabase db = this.getReadableDatabase();
+        final Cursor cursor = db.query(PropertyTransaction.TABLE_NAME, PropertyTransaction.FIELDS,
+                PropertyTransaction.COL_PROPERTY + " IS ?", new String[] { String.valueOf(id) },
+                null, null, null, null);
+
+
+        if (cursor == null || cursor.isAfterLast()) {
+            return null;
+        }
+        else{
+
+            return cursor;
+        }
+
+    }
+
+    public synchronized Cursor fetchPayeeByName(String searchToken, final long id){
+        final SQLiteDatabase db = this.getReadableDatabase();
+        final Cursor cursor = db.query(PropertyTransaction.TABLE_NAME, PropertyTransaction.FIELDS,
+                PropertyTransaction.COL_PROPERTY + " IS ? AND " + PropertyTransaction.COL_PAYEE + " IS ? ",
+                new String[] { String.valueOf(id), searchToken },
+                null, null, null, null);
+        while (cursor.moveToNext()) {
+//test search....
+            Log.d("WTF",
+
+                    cursor.getString(cursor.getColumnIndex(PropertyTransaction.COL_PAYEE)) + " " +
+                            cursor.getString(cursor.getColumnIndex(PropertyTransaction.COL_AMOUNT))
+            );
+        }
+
+
+        if (cursor == null || cursor.isAfterLast()) {
+            return null;
+        }
+        else{
+
+            return cursor;
+        }
+    }
+
+    public synchronized boolean putTransaction(final PropertyTransaction propertyTransaction) {
+        boolean success = false;
+        int result = 0;
+        final SQLiteDatabase db = this.getWritableDatabase();
+
+        if (propertyTransaction.id > -1) {
+            result += db.update(PropertyTransaction.TABLE_NAME, propertyTransaction.getContent(),
+                    PropertyTransaction.COL_ID + " IS ?",
+                    new String[] { String.valueOf(propertyTransaction.id) });
+        }
+
+        if (result > 0) {
+            success = true;
+        } else {
+            // Update failed or wasn't possible, insert instead
+            final long id = db.insert(PropertyTransaction.TABLE_NAME, null,
+                    propertyTransaction.getContent());
+
+            if (id > -1) {
+                propertyTransaction.id = id;
+                success = true;
+            }
+        }
+
+        if (success) {
+            notifyProviderOnTransactionChange();
+        }
+
+        return success;
+    }
+
+    public synchronized int removeTransaction(final PropertyTransaction propertyTransaction) {
+        final SQLiteDatabase db = this.getWritableDatabase();
+        final int result = db.delete(PropertyTransaction.TABLE_NAME,
+                PropertyTransaction.COL_ID + " IS ?",
+                new String[] { Long.toString(propertyTransaction.id) });
+
+        if (result > 0) {
+            notifyProviderOnTransactionChange();
+        }
+        return result;
+    }
+
+    private void notifyProviderOnTransactionChange() {
+        context.getContentResolver().notifyChange(
+                PropertyTransactionProvider.URI_PROPERTY_TRANSACTION, null, false);
+    }
+    /*** End of Transaction ***/
 
 
 

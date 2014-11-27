@@ -124,6 +124,7 @@ public class PropertyListActivity extends FragmentActivity
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
