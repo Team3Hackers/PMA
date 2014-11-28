@@ -64,12 +64,7 @@ public class PropertyDetailFragment extends Fragment{
 
 
             getActivity().supportInvalidateOptionsMenu();//Call back to call update to menu options every page swipe
-//
-//            FragmentLifecycle fragmentToHide = (FragmentLifecycle)myTabAdapter.getItem(currentPosition);
-//            fragmentToHide.onPauseFragment();
-//
-//            FragmentLifecycle fragmentToShow = (FragmentLifecycle)myTabAdapter.getItem(newPosition);
-//            fragmentToShow.onResumeFragment();
+
 
 
 
@@ -79,7 +74,7 @@ public class PropertyDetailFragment extends Fragment{
              * I used it to force the fragment to reload, which calls all the textfield code, and
              * I used it to write to the db
              */
-         //   myTabAdapter.notifyDataSetChanged();
+//            myTabAdapter.notifyDataSetChanged();
         }
 
         /**
@@ -100,7 +95,11 @@ public class PropertyDetailFragment extends Fragment{
 
         View rootView = inflater.inflate(R.layout.view_tab_pager, container, false);
         viewPager = (ViewPager) rootView.findViewById(R.id.pager);//get pager from app xml, need to assign it to current view
-        myTabAdapter = new TabAdapter(getFragmentManager());
+
+
+           myTabAdapter = new TabAdapter(getFragmentManager());
+
+
         /**
          * Here, I pass the selected ID from the list to the adaptor.
          * The adaptor will later set the active fragment with the id.
@@ -121,6 +120,7 @@ public class PropertyDetailFragment extends Fragment{
         //Sets the onPageChangeListner to implement the onpause and onresume
         viewPager.setOnPageChangeListener(pageChangeListener);//here
         viewPager.setAdapter(myTabAdapter);
+
 /*Left this in long for clarity
  *replace next 2 lines with {lin1 and 2}
  * if(getArguments().getBoolean(ARG_ITEM_NEW))
@@ -134,6 +134,9 @@ public class PropertyDetailFragment extends Fragment{
 
         return rootView;
     }
+
+
+
 
 
 }

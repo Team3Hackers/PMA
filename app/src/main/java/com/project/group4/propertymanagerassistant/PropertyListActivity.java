@@ -1,8 +1,10 @@
 package com.project.group4.propertymanagerassistant;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +30,8 @@ import com.project.group4.propertymanagerassistant.database.Property;
  * {@link PropertyListFragment.Callbacks} interface
  * to listen for item selections.
  */
+
+
 public class PropertyListActivity extends FragmentActivity
         implements PropertyListFragment.Callbacks {
 
@@ -40,18 +44,11 @@ public class PropertyListActivity extends FragmentActivity
      */
     private boolean mTwoPane;
     private boolean newProperty = false;
-    private boolean editTenant= false;
-    private boolean editOwner = false;
-    private boolean editProperty = false;
-
-    private MenuItem editTenantItem;
-    private MenuItem editPropertyItem;
-
+private boolean test = false;
     private boolean propertySelected = false ;
-    private Long propertyId;
 
 
-    
+
 
 
     @Override
@@ -65,12 +62,17 @@ public class PropertyListActivity extends FragmentActivity
             // res/values-sw600dp). If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
+            //Force to landscape because I cant fix this shit!
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 
             // In two-pane mode, list items should be given the
             // 'activated' state when touched.
-            ((PropertyListFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.property_list))
-                    .setActivateOnItemClick(true);
+
+
+                ((PropertyListFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.property_list))
+                        .setActivateOnItemClick(true);
+
 
         }
 
@@ -100,25 +102,36 @@ public class PropertyListActivity extends FragmentActivity
             // adding or replacing the detail fragment using a
             // fragment transaction.
 
-            // Switch statement to send to the correct view and enable save button/editable text...
 
-         //   Bundle arguments = new Bundle();
-         //   arguments.putLong(PropertyDetailFragment.ARG_ITEM_ID, id);
-            PropertyDetailFragment fragment = new PropertyDetailFragment();
-            fragment.setArguments(arguments);
+            //Check for old, and delete it....this is not working
+//            if (getSupportFragmentManager().findFragmentByTag("test")!=null){
+//                getSupportFragmentManager().popBackStack();
+//
+//            }
 
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.property_detail_container, fragment)
-                    .commit();
+
+                PropertyDetailFragment fragment = new PropertyDetailFragment();//
+                fragment.setArguments(arguments);
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.property_detail_container, fragment, "test")
+                        .commit();
+
+
+                //Dont create new , replace existing
+//                PropertyDetailFragment newfragment = (PropertyDetailFragment) getSupportFragmentManager().findFragmentByTag("test");//
+//                newfragment.setArguments(arguments);
+//
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.property_detail_container, newfragment, "test")
+//                        .commit();
 
 
         } else {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, PropertyDetailActivity.class);
-
             detailIntent.putExtras(arguments);
-            //detailIntent.putExtra(PropertyDetailFragment.ARG_ITEM_ID, id);
             startActivity(detailIntent);
 
         }
@@ -136,21 +149,6 @@ public class PropertyListActivity extends FragmentActivity
 
         menu.add(menu.NONE, 0, 0, "Add New Property");
 
-/**
-
-        if(mTwoPane==true){
-            //Maybe add a bool to help find which one was chosen?
-            inflater.inflate(R.menu.list_activity_small, menu);
-           
-        }
-        //Single pane mode, only add property
-        else{
-            inflater.inflate(R.menu.list_activity_small, menu);
-        }
-        editTenantItem =  menu.findItem(R.id.editTenant);
-        editPropertyItem = menu.findItem(R.id.editProperty);
-
-*/
 
 
         return true;
@@ -167,8 +165,7 @@ public class PropertyListActivity extends FragmentActivity
         switch (item.getItemId()){
             case 0://New property = 1. no xml right now
                 newProperty = true;
-//                editProperty = false;
-//                editTenant = false;
+
                 result = true;
                 // Create a new person.
                 Property p = new Property();
@@ -176,23 +173,7 @@ public class PropertyListActivity extends FragmentActivity
                 // Open a new fragment with the new id
                 onItemSelected(p.id);
                 break;
-        /**    case R.id.editProperty:
-                newProperty = false;
-                editProperty = true;
-                editTenant = false;
-                onItemSelected(propertyId);//CAREFUL, ONLY ALLOW USER TO SELECT THIS MENU ITEM IF THEY HAVE A PROPERTY IN VIEW
-Log.d("OptionSelected: " , "Edit Proprty");
-                result = true;
-                break;
-            case R.id.editTenant:
-                newProperty = false;
-                editProperty = false;
-                editTenant = true;
-                onItemSelected(propertyId);//CAREFUL, ONLY ALLOW USER TO SELECT THIS MENU ITEM IF THEY HAVE A PROPERTY IN VIEW
-Log.d("OptionSelected: " , "Edit Tenant");
-                result = true;
-                break;
-         */
+
             default:
                 result = false;
                 break;
@@ -202,5 +183,9 @@ Log.d("OptionSelected: " , "Edit Tenant");
         return result;
     }
 
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("test",true);
+    }
 }

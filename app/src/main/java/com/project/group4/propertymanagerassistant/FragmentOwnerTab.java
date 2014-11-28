@@ -22,7 +22,7 @@ import com.project.group4.propertymanagerassistant.database.OwnerActive;
 /**
  * Created by benhoelzel on 10/26/14.
  */
-public class FragmentOwnerTab extends Fragment implements  View.OnClickListener {
+public class FragmentOwnerTab extends Fragment implements View.OnClickListener {
 
     public static String FRAGMENT_TYPE = "fragment_owner_tab";
     private Menu thisMenu;
@@ -54,6 +54,7 @@ public class FragmentOwnerTab extends Fragment implements  View.OnClickListener 
 
             propertyId = savedInstanceState.getLong(PropertyDetailFragment.ARG_ITEM_ID);
             newProperty = savedInstanceState.getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
+
         }
         else{
             propertyId = getArguments().getLong(PropertyDetailFragment.ARG_ITEM_ID);
@@ -65,33 +66,23 @@ public class FragmentOwnerTab extends Fragment implements  View.OnClickListener 
 
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_owner_tab, container, false);
-        //Button to save.
-//        this.propertyId = savedInstanceState.getLong("item_id");
-//        this.newProperty = savedInstanceState.getBoolean("new_property", false);
+
         saveButton = (Button) view.findViewById(R.id.owner_save_button);
         saveButton.setOnClickListener(this);
-//        if(newProperty)//new propert only, everyone else is a edit
-//            newOwner = true;//Set the new owner flag
-//        else
         saveButton.setVisibility(View.GONE);
-
-
-//  //Need new db objects for new properties
-//        if (newProperty ) {
-//            mItem = DatabaseHandler.getInstance(getActivity()).getOwner(propertyId);
-//            assocationItem = DatabaseHandler.getInstance(getActivity()).getOwnerActive(propertyId);
-//        }
-//
-////For aready active owner, need join
 
         //Display current owner
         if (propertyId != null) {
             // Get property detail from database
             mItem = DatabaseHandler.getInstance(getActivity()).getOwnerJoinActive(propertyId);
             assocationItem = DatabaseHandler.getInstance(getActivity()).getOwnerActive(propertyId);
+            Log.d("WTF-owner", "fail :: " + propertyId + " :: "+mItem.firstName);
+
         }
 
 
@@ -124,12 +115,13 @@ public class FragmentOwnerTab extends Fragment implements  View.OnClickListener 
             textPhone = ((TextView) view.findViewById(R.id.textPhone));
             textPhone.setText(mItem.phone);
 
-        } else {//May never reach this since we build the tables in database handler construction
-            //Create new owner object?
-            mItem = new Owner();
-            //Create new owner active object?
-            assocationItem = new OwnerActive();
         }
+//        else {//May never reach this since we build the tables in database handler construction
+//            //Create new owner object?
+//            mItem = new Owner();
+//            //Create new owner active object?
+//            assocationItem = new OwnerActive();
+//        }
 
 
 

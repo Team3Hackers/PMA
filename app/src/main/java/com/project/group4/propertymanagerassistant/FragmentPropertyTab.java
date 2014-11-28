@@ -44,49 +44,53 @@ public class FragmentPropertyTab extends Fragment implements /*FragmentLifecycle
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        if(savedInstanceState!=null){
+            propertyId = savedInstanceState.getLong(PropertyDetailFragment.ARG_ITEM_ID);
+            newProperty = savedInstanceState.getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
+        }
+        else{
+            propertyId = getArguments().getLong(PropertyDetailFragment.ARG_ITEM_ID);
+            newProperty =  getArguments().getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_property_tab, container, false);
         //Button to save.
-
         saveButton = (Button) view.findViewById(R.id.property_save_button);
         saveButton.setOnClickListener(this);
-        if(!newProperty)
+        if (!newProperty)
             saveButton.setVisibility(View.GONE);
 
+        if(savedInstanceState==null) {
 
-        if (propertyId != null) {
-            // Get property detail from database
-            mItem = DatabaseHandler.getInstance(getActivity()).getProperty(propertyId);
+            if (propertyId != null) {
+                // Get property detail from database
+                mItem = DatabaseHandler.getInstance(getActivity()).getProperty(propertyId);
+            }
+
+            if (mItem != null) {
+                //Get text field
+                textAddress = ((TextView) view.findViewById(R.id.textAddress));
+                //Set text field with property address
+                textAddress.setText(mItem.address);
+
+                textUnit = ((TextView) view.findViewById(R.id.textUnit));
+                textUnit.setText(mItem.unit);
+
+                textCity = ((TextView) view.findViewById(R.id.textCity));
+                textCity.setText(mItem.city);
+
+                textState = ((TextView) view.findViewById(R.id.textState));
+                textState.setText(mItem.state);
+
+                textZip = ((TextView) view.findViewById(R.id.textZip));
+                textZip.setText(mItem.zip);
+
+
+            }
         }
-
-        if (mItem != null) {
-            //Get text field
-            textAddress = ((TextView) view.findViewById(R.id.textAddress));
-            //Set text field with property address
-            textAddress.setText(mItem.address);
-
-            textUnit = ((TextView) view.findViewById(R.id.textUnit));
-            textUnit.setText(mItem.unit);
-
-            textCity = ((TextView) view.findViewById(R.id.textCity));
-            textCity.setText(mItem.city);
-
-            textState = ((TextView) view.findViewById(R.id.textState));
-            textState.setText(mItem.state);
-
-            textZip = ((TextView) view.findViewById(R.id.textZip));
-            textZip.setText(mItem.zip);
-
-
-
-
-
-
-        }
-
         return view;
     }
 
@@ -120,7 +124,8 @@ public class FragmentPropertyTab extends Fragment implements /*FragmentLifecycle
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-       // outState.putString("text",textString);
+        outState.putLong(PropertyDetailFragment.ARG_ITEM_ID, propertyId);
+        outState.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW, newProperty);
     }
 
 
@@ -142,9 +147,7 @@ public class FragmentPropertyTab extends Fragment implements /*FragmentLifecycle
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-//        menu.removeItem(2);
-//        menu.removeItem(3);
-//        menu.removeItem(4);
+
         for(int i = 1; i <= 10; i++){
             menu.removeItem(i);
         }

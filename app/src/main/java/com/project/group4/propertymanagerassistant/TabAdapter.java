@@ -46,19 +46,22 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
         Fragment fragment = null;
         switch (i) {
             case 0:
-            fragment = new FragmentTransactionTab();
+           fragment = new FragmentTransactionTab();
+//                fragment = new FragmentReportTab();
 
             break;
         case 1:
-            fragment = new FragmentPropertyTab();
+           fragment = new FragmentPropertyTab();// <-- problem with multiple views?? not sure how to fix, it is in the new fragment call
+//          fragment = new FragmentReportTab();
 
-            ((FragmentPropertyTab) fragment).setPropertyId(propertyId, newProperty);//Passing property id and property status to the
+//            ((FragmentPropertyTab) fragment).setPropertyId(propertyId, newProperty);//Passing property id and property status to the
             break;
         case 2://Tenant Tab
-//            if(false)//Call back???
-//            {
+
             //This is the root view to be replaced by other fragments.
-            fragment = new FragmentTenantRoot();
+            fragment = new FragmentTenantRoot();//<--problem with blanking after roation//HERRE
+//            fragment = new FragmentReportTab();
+
 //            ((FragmentTenantRoot) fragment).setPropertyArgs(propertyId, newProperty, FragmentTenantTab.FRAGMENT_TYPE );
                 //fragment = new FragmentTenantTab();
                 //((FragmentTenantTab) fragment).setPropertyId(propertyId, newProperty);
@@ -72,7 +75,11 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
             break;
 
         case 3://Owner tab
+
             fragment = new FragmentOwnerRoot();
+//            fragment = new FragmentReportTab();
+
+
 //            ((FragmentOwnerRoot) fragment).setPropertyArgs(propertyId, newProperty, FragmentOwnerTab.FRAGMENT_TYPE);
 //            fragment = new FragmentOwnerTab();
 //            ((FragmentOwnerTab) fragment).setPropertyId(propertyId);//Passing property id to the fragment

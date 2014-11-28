@@ -42,19 +42,24 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
     Boolean newTenant = false;
     Button saveButton;
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        if (savedInstanceState!=null){//On a rotation, may not do this, root will give this.
-//            Maybe I am doing this to get a item??
-            propertyId = savedInstanceState.getLong(PropertyDetailFragment.ARG_ITEM_ID);
-            newProperty = savedInstanceState.getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
-        }
-        else{
+        Log.d("TenantTab", "OnCreate");
+//        if (savedInstanceState!=null){//On a rotation, may not do this, root will give this.
+////            Maybe I am doing this to get a item??
+//
+//            propertyId = savedInstanceState.getLong(PropertyDetailFragment.ARG_ITEM_ID);
+//            newProperty = savedInstanceState.getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
+//        }
+//        else{
+
             propertyId = getArguments().getLong(PropertyDetailFragment.ARG_ITEM_ID);
             newProperty = getArguments().getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
-        }
+//        }
 
     }
 
@@ -265,8 +270,7 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
             args.putLong(PropertyDetailFragment.ARG_ITEM_ID, propertyId);
             args.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW,newProperty);
             /** Get fragment manager from activity **/
-            FragmentTransaction trans = getFragmentManager()
-                    .beginTransaction();
+            FragmentTransaction trans = getActivity().getSupportFragmentManager().beginTransaction(); //getFragmentManager().beginTransaction();
             /** Build new fragment with arguments **/
             FragmentTenantPast fragment = new FragmentTenantPast();
             fragment.setArguments(args);
@@ -346,4 +350,25 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
 //       }
 //
 //    }
+
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putLong(PropertyDetailFragment.ARG_ITEM_ID, propertyId);
+//        outState.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW, newProperty);
+//    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("TenantTab", "onPause");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("TenantTab", "OnDestroy");
+    }
 }
+
+

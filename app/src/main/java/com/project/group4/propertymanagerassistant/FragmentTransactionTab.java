@@ -77,11 +77,11 @@ public class FragmentTransactionTab extends Fragment {
                 to,
                 0);
 
-        ListView listView = (ListView) rootView.findViewById( android.R.id.list );
+        ListView listView = (ListView) rootView.findViewById( R.id.listHere );
         // Assign adapter to ListView
         listView.setAdapter(dataAdapter);
 
-
+/*****/
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> listView, View view,
@@ -100,7 +100,7 @@ public class FragmentTransactionTab extends Fragment {
             }
         });
 
-//Searchable
+////Searchable not working......
         EditText myFilter = (EditText) rootView.findViewById( R.id.myFilter );
 
 
@@ -114,9 +114,8 @@ public class FragmentTransactionTab extends Fragment {
             }
 
             public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-                dataAdapter.getFilter().filter(s.toString());
-            }
+                                      int before, int count)
+            {dataAdapter.getFilter().filter(s.toString());}
         });
 
         dataAdapter.setFilterQueryProvider(new FilterQueryProvider() {
@@ -140,17 +139,16 @@ public class FragmentTransactionTab extends Fragment {
         menu.add(menu.NONE, 2, 2, "New");
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d("FragmentTransactionsTab", "onOptionsItemSelected");
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        Log.d("FragmentTransactionsTab", "onOptionsItemSelected");
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putLong(PropertyDetailFragment.ARG_ITEM_ID, propertyId);
     }
-
 
 }
