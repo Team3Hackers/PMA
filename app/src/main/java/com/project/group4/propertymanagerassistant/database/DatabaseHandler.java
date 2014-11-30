@@ -684,7 +684,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 
-    //TODO: update this to include the assciation table owner_active
+    //
     public synchronized boolean updateOwner(final Owner Owner) {
         boolean success = false;
         int result = 0;
@@ -816,8 +816,24 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 /** Transaction **/
 
+    public synchronized Cursor getSinglePropertyTransaction(final long id, final long trans_id) {
+        final SQLiteDatabase db = this.getReadableDatabase();
+        final Cursor cursor = db.query(PropertyTransaction.TABLE_NAME, PropertyTransaction.FIELDS,
+                PropertyTransaction.COL_PROPERTY + " IS ? AND " + PropertyTransaction.COL_ID + " IS ? ", new String[] { String.valueOf(id), Long.toString(trans_id) },
+                null, null, null, null);
 
-    public synchronized Cursor getPropertyTransaction(final long id) {
+        cursor.moveToFirst();
+
+        if (cursor == null || cursor.isAfterLast()) {
+            return null;
+        }
+        else{
+
+            return cursor;
+        }
+
+    }
+    public synchronized Cursor getAllPropertyTransaction(final long id) {
         final SQLiteDatabase db = this.getReadableDatabase();
         final Cursor cursor = db.query(PropertyTransaction.TABLE_NAME, PropertyTransaction.FIELDS,
                 PropertyTransaction.COL_PROPERTY + " IS ?", new String[] { String.valueOf(id) },
@@ -859,7 +875,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
     }
 
-    public synchronized boolean putTransaction(final PropertyTransaction propertyTransaction) {
+    public synchronized boolean putPropertyTransaction(final PropertyTransaction propertyTransaction) {
         boolean success = false;
         int result = 0;
         final SQLiteDatabase db = this.getWritableDatabase();
@@ -890,7 +906,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return success;
     }
 
-    public synchronized int removeTransaction(final PropertyTransaction propertyTransaction) {
+    public synchronized boolean updatePropertyTransaction(final PropertyTransaction pTrans) {
+        boolean success = false;
+        int result = 0;
+        final SQLiteDatabase db = this.getWritableDatabase();
+
+        if (pTrans.id > -1) {
+            result += db.update(PropertyTransaction.TABLE_NAME, pTrans.getContent(),
+                    PropertyTransaction.COL_ID + " IS ?",
+                    new String[] { String.valueOf(pTrans.id) });
+        }
+
+        if (result > 0) {
+            success = true;
+        }
+        if (success) {
+            notifyProviderOnPropertyChange();
+        }
+
+        return success;
+    }
+
+    public synchronized int removePropertyTransaction(final PropertyTransaction propertyTransaction) {
         final SQLiteDatabase db = this.getWritableDatabase();
         final int result = db.delete(PropertyTransaction.TABLE_NAME,
                 PropertyTransaction.COL_ID + " IS ?",

@@ -25,7 +25,7 @@ import com.project.group4.propertymanagerassistant.database.OwnerActive;
 public class FragmentOwnerTab extends Fragment implements View.OnClickListener {
 
     public static String FRAGMENT_TYPE = "fragment_owner_tab";
-    private Menu thisMenu;
+//    private Menu thisMenu;
     private Owner mItem;
     private Owner tempItem;
     private OwnerActive assocationItem;
@@ -261,25 +261,6 @@ public class FragmentOwnerTab extends Fragment implements View.OnClickListener {
         Toast.makeText(getActivity(), mItem.firstName + " " + mItem.lastName + " saved to database", Toast.LENGTH_SHORT).show();
     }
 
-    //works,but the last data item is never changed and we end up with dupliates
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        Log.d("OwnerTab", "::paused");
-//        if(saveButton.getVisibility() == View.VISIBLE && newOwner) {
-//            insertOwnerFromUI();
-//            insertOwnerActiveInFragment();
-//            newOwner = false;
-//        }
-//        else if (saveButton.getVisibility() == View.VISIBLE && newProperty){
-//            updateOwnerFromUI();
-//            newProperty = false;
-//        }
-//        else{
-//            updateOwnerFromUI();
-//        }
-//
-//    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
