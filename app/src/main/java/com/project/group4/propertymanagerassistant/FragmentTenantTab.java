@@ -248,7 +248,7 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
     @Override
 //WORKING WITH EDIT ONLY RIGHT NOW, NEED GET THE BUTTON WHEN OUTSIDE ACTIVITY SELECTS NEW PROP
     public boolean onOptionsItemSelected(MenuItem item) {
-        saveButton.setVisibility(View.VISIBLE);
+
         if (item.getItemId() == 5) {
 
             newTenant = true;//Used as new tenant flag in onClick method
@@ -256,14 +256,16 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
 
 //            mItem.tenantActive = "0";//disable old tenants status
 //            updateTenantFromUI();//Update old tenants status
+            saveButton.setVisibility(View.VISIBLE);
 
-
-
+            return true;
 
         } else if (item.getItemId() == 4){
+            saveButton.setVisibility(View.VISIBLE);
             newTenant = false;//Not a new tenant, leave active flag alone...
+            return true;
         }
-        if(item.getItemId()==6) {//get past, no db change
+        else if(item.getItemId()==6) {//get past, no db change
             /** Create bundle to send to next fragment **/
             Bundle args = new Bundle();
             /** Set agruments to pass in pundle **/
@@ -280,10 +282,11 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
             trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);//SOWER TRANSITION
             trans.addToBackStack("StaticFragment");
             trans.commit();
-
+            return true;
         }
-
-        return super.onOptionsItemSelected(item);
+        else {
+            return false;
+        }
     }
 
     @Override

@@ -64,10 +64,6 @@ public class PropertyDetailFragment extends Fragment{
 
 
             getActivity().supportInvalidateOptionsMenu();//Call back to call update to menu options every page swipe
-
-
-
-
             currentPosition = newPosition;
             /**
              * This method calls the getItemPosition method in TabAdaptor.

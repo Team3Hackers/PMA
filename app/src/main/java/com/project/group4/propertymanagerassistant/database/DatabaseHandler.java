@@ -7,6 +7,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
+
 /**
  * Created by benhoelzel on 11/12/14.
  * We use the databaseHandler to give us a database object. This object has all nessary means of
@@ -101,7 +106,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         propertyTransaction.property = propertyId;
         propertyTransaction.amount = "50.00";
         propertyTransaction.category = "Maintenance";
-        propertyTransaction.date = "5/1/14";
+        propertyTransaction.date = "05/11/2014";
         propertyTransaction.payee = "Al's Gardening";
         propertyTransaction.note = "Monthly yard maintenance";
         db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
@@ -150,78 +155,95 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         currentOwner.idOwner = ownerId;
         db.insert(OwnerActive.TABLE_NAME, null, currentOwner.getContent());
 
+        //Default
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/dd/MM");
+        Calendar cal = Calendar.getInstance();
+
+
         propertyTransaction.property  = propertyId;
         propertyTransaction.amount = "1500.00";
         propertyTransaction.category = "Repair";
-        propertyTransaction.date = "10/14/14";
+        propertyTransaction.date = dateFormat.format(cal.getTime());//Long;
         propertyTransaction.payee = "Plumbers are us";
         propertyTransaction.note = "Water heater replacment";
         db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
 
+        cal = shiftTime(cal);
 
         propertyTransaction.property = propertyId;
         propertyTransaction.amount = "50.00";
         propertyTransaction.category = "Maintenance";
-        propertyTransaction.date = "5/1/14";
+        propertyTransaction.date = dateFormat.format(cal.getTime());//Long;
         propertyTransaction.payee = "Smith's Gardening";
         propertyTransaction.note = "Monthly yard maintenance";
         db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
 
+        cal = shiftTime(cal);
+
         propertyTransaction.property = propertyId;
         propertyTransaction.amount = "50.00";
         propertyTransaction.category = "Maintenance";
-        propertyTransaction.date = "5/1/14";
+        propertyTransaction.date = dateFormat.format(cal.getTime());//Long;
         propertyTransaction.payee = "Margo's Gardening";
         propertyTransaction.note = "Monthly yard maintenance";
         db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
 
+        cal = shiftTime(cal);
 
         propertyTransaction.property = propertyId;
         propertyTransaction.amount = "50.00";
         propertyTransaction.category = "Maintenance";
-        propertyTransaction.date = "5/1/14";
+        propertyTransaction.date = dateFormat.format(cal.getTime());//Long;
         propertyTransaction.payee = "Rusty's Gardening";
         propertyTransaction.note = "Monthly yard maintenance";
         db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
 
+        cal = shiftTime(cal);
+
         propertyTransaction.property = propertyId;
         propertyTransaction.amount = "50.00";
         propertyTransaction.category = "Maintenance";
-        propertyTransaction.date = "5/1/14";
+        propertyTransaction.date = dateFormat.format(cal.getTime());//Long;
         propertyTransaction.payee = "Billy's Gardening";
         propertyTransaction.note = "Monthly yard maintenance";
         db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
 
+        cal = shiftTime(cal);
+
         propertyTransaction.property = propertyId;
         propertyTransaction.amount = "50.00";
         propertyTransaction.category = "Maintenance";
-        propertyTransaction.date = "5/1/14";
+        propertyTransaction.date = dateFormat.format(cal.getTime());//Long;
         propertyTransaction.payee = "Nick's Gardening";
         propertyTransaction.note = "Monthly yard maintenance";
         db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
 
+        cal = shiftTime(cal);
 
         propertyTransaction.property = propertyId;
         propertyTransaction.amount = "50.00";
         propertyTransaction.category = "Maintenance";
-        propertyTransaction.date = "5/1/14";
+        propertyTransaction.date = dateFormat.format(cal.getTime());//Long;
         propertyTransaction.payee = "George's Gardening";
         propertyTransaction.note = "Monthly yard maintenance";
         db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
 
+        cal = shiftTime(cal);
 
         propertyTransaction.property = propertyId;
         propertyTransaction.amount = "50.00";
         propertyTransaction.category = "Maintenance";
-        propertyTransaction.date = "5/1/14";
+        propertyTransaction.date = dateFormat.format(cal.getTime());//Long;
         propertyTransaction.payee = "Franks's Gardening";
         propertyTransaction.note = "Monthly yard maintenance";
         db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
 
+        cal = shiftTime(cal);
+
         propertyTransaction.property = propertyId;
         propertyTransaction.amount = "50.00";
         propertyTransaction.category = "Maintenance";
-        propertyTransaction.date = "5/1/14";
+        propertyTransaction.date = dateFormat.format(cal.getTime());//Long;
         propertyTransaction.payee = "Bob's Gardening";
         propertyTransaction.note = "Monthly yard maintenance";
         db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
@@ -816,28 +838,39 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 /** Transaction **/
 
-    public synchronized Cursor getSinglePropertyTransaction(final long id, final long trans_id) {
+    public synchronized PropertyTransaction getSinglePropertyTransaction(final long id, final long trans_id) {
         final SQLiteDatabase db = this.getReadableDatabase();
         final Cursor cursor = db.query(PropertyTransaction.TABLE_NAME, PropertyTransaction.FIELDS,
                 PropertyTransaction.COL_PROPERTY + " IS ? AND " + PropertyTransaction.COL_ID + " IS ? ", new String[] { String.valueOf(id), Long.toString(trans_id) },
                 null, null, null, null);
-
-        cursor.moveToFirst();
 
         if (cursor == null || cursor.isAfterLast()) {
             return null;
         }
         else{
 
-            return cursor;
+            PropertyTransaction item = null;
+            if (cursor.moveToFirst()) {
+                item = new PropertyTransaction(cursor);
+            }
+            cursor.close();
+            return item;
+
+
         }
 
     }
+
+    /***
+     * Sorts desc on date
+     *
+     *
+     */
     public synchronized Cursor getAllPropertyTransaction(final long id) {
         final SQLiteDatabase db = this.getReadableDatabase();
         final Cursor cursor = db.query(PropertyTransaction.TABLE_NAME, PropertyTransaction.FIELDS,
-                PropertyTransaction.COL_PROPERTY + " IS ?", new String[] { String.valueOf(id) },
-                null, null, null, null);
+                PropertyTransaction.COL_PROPERTY + " IS ? ", new String[] { String.valueOf(id) },
+                null, null,PropertyTransaction.COL_DATE + " DESC ", null);
 
 
         if (cursor == null || cursor.isAfterLast()) {
@@ -945,8 +978,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
     /*** End of Transaction ***/
 
-
-
+private Calendar shiftTime(Calendar cal){
+    Random r = new Random();
+    int i1 = r.nextInt(80);
+    cal.add(Calendar.DATE, i1);
+    return  cal;
+}
 
 }
 

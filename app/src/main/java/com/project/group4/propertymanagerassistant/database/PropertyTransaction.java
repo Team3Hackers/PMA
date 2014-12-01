@@ -8,6 +8,11 @@ package com.project.group4.propertymanagerassistant.database;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.text.format.DateFormat;
+import android.util.Log;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * A class representation of a row in table "PropertyTransaction".
@@ -41,11 +46,12 @@ public class PropertyTransaction {
                     + COL_ID + " INTEGER PRIMARY KEY, "
                     + COL_PROPERTY + " INTEGER , "
                     + COL_AMOUNT + " TEXT NOT NULL DEFAULT '', "
-                    + COL_DATE + " TEXT NOT NULL DEFAULT '', "
+                    + COL_DATE + " DATE NOT NULL DEFAULT '', "//Change
                     + COL_CATEGORY + " TEXT NOT NULL DEFAULT '', "
                     + COL_PAYEE + " TEXT NOT NULL DEFAULT '', "
                     + COL_NOTE + " TEXT NOT NULL DEFAULT '' "
                     + ")";
+
 
     // Fields corresponding to database columns
     public long id = -1;

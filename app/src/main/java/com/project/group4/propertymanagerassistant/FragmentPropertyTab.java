@@ -33,7 +33,7 @@ public class FragmentPropertyTab extends Fragment implements /*FragmentLifecycle
 
 
     String textString;
-    Long propertyId;
+    long propertyId;
     Boolean newProperty = false;
     TextView text;
     Button saveButton;
@@ -65,7 +65,7 @@ public class FragmentPropertyTab extends Fragment implements /*FragmentLifecycle
 
         if(savedInstanceState==null) {
 
-            if (propertyId != null) {
+            if (propertyId != -1) {
                 // Get property detail from database
                 mItem = DatabaseHandler.getInstance(getActivity()).getProperty(propertyId);
             }
@@ -151,7 +151,7 @@ public class FragmentPropertyTab extends Fragment implements /*FragmentLifecycle
         for(int i = 1; i <= 10; i++){
             menu.removeItem(i);
         }
-        menu.add(menu.NONE, 3, 3, "Edit");
+        menu.add((int)propertyId, 3, 3, "Edit");
     }
 
     /**
@@ -174,10 +174,15 @@ public class FragmentPropertyTab extends Fragment implements /*FragmentLifecycle
 
     @Override//WORKING WITH EDIT ONLY RIGHT NOW, NEED GET THE BUTTON WHEN OUTSIDE ACTIVITY SELECTS NEW PROP
     public boolean onOptionsItemSelected(MenuItem item) {
-        saveButton.setVisibility(View.VISIBLE);
 
-        Log.d("FragmentPropertyTab","onOptionsItemSelected");
-        return super.onOptionsItemSelected(item);
+        if (item.getItemId() == 3
+                &&
+                item.getGroupId() == (int) propertyId) {
+            this.saveButton.setVisibility(View.VISIBLE);
+            return super.onOptionsItemSelected(item);
+        } else {
+            return false;
+        }
     }
 
     @Override

@@ -26,7 +26,7 @@ public class FragmentTenantRoot extends Fragment /*implements FragmentLifecycle*
 
 	private static final String TAG = "RootFragment";
 
-    Long propertyId;///Using this as a test, before we get to transaction tables. REFACTOR WHEN WOKRING
+    long propertyId;///Using this as a test, before we get to transaction tables. REFACTOR WHEN WOKRING
     Boolean newProperty = false;//Default
     String fragmentType;//Type of incoming fragment
 
@@ -65,11 +65,11 @@ public class FragmentTenantRoot extends Fragment /*implements FragmentLifecycle*
         for(int i = 1; i <= 10; i++){
             menu.removeItem(i);
         }
-        menu.add(menu.NONE, 4, 4, "Edit Tenant");
+        menu.add((int)propertyId, 4, 4, "Edit Tenant");
 
-        menu.add(menu.NONE, 5, 5, "New Tenant");
+        menu.add((int)propertyId, 5, 5, "New Tenant");
 
-        menu.add(menu.NONE, 6, 6, "Past Tenants");
+        menu.add((int)propertyId, 6, 6, "Past Tenants");
 
 
     }

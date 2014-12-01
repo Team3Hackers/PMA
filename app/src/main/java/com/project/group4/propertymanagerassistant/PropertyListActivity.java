@@ -88,7 +88,7 @@ private boolean test = false;
     @Override
     public void onItemSelected(Long id) {
 
-        propertySelected = true;
+
         //propertyId = id;//only used when item is selected in Options menu, careful
        // invalidateOptionsMenu(); DONT THINK I NEED THIS, BUT CHECK BIG SCREEN DEVICE
 
@@ -101,15 +101,17 @@ private boolean test = false;
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
+Log.d("Crap", ""+getSupportFragmentManager().findFragmentByTag("test"));
 
+            //Check for old, not in view, and delete it....this is not working
+            if (getSupportFragmentManager().findFragmentByTag("test")!=null){
+               Log.d("Crap", "Remove this!");
+                getSupportFragmentManager().beginTransaction().detach(getSupportFragmentManager().findFragmentByTag("test")).commit();
 
-            //Check for old, and delete it....this is not working
-//            if (getSupportFragmentManager().findFragmentByTag("test")!=null){
-//                getSupportFragmentManager().popBackStack();
-//
-//            }
+            }
+           // invalidateOptionsMenu();
 
-
+Log.d("Crap", ""+getSupportFragmentManager().findFragmentByTag("test"));
                 PropertyDetailFragment fragment = new PropertyDetailFragment();//
                 fragment.setArguments(arguments);
 
@@ -188,4 +190,6 @@ private boolean test = false;
         super.onSaveInstanceState(outState);
         outState.putBoolean("test",true);
     }
+
+
 }

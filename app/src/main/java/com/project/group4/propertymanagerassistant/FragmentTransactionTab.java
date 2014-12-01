@@ -3,6 +3,7 @@ package com.project.group4.propertymanagerassistant;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -10,6 +11,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,10 +27,15 @@ import android.widget.Toast;
 import com.project.group4.propertymanagerassistant.database.DatabaseHandler;
 import com.project.group4.propertymanagerassistant.database.PropertyTransaction;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by benhoelzel on 10/26/14.
  */
-public class FragmentTransactionTab extends Fragment {
+public class FragmentTransactionTab extends Fragment  {
 
     private long propertyId;
     private SimpleCursorAdapter dataAdapter;
@@ -40,6 +47,7 @@ private long selectedId = -1;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setHasOptionsMenu(true);
         if (savedInstanceState!=null){
             propertyId = savedInstanceState.getLong(PropertyDetailFragment.ARG_ITEM_ID);
@@ -56,7 +64,7 @@ private long selectedId = -1;
         View rootView;
         rootView = inflater.inflate(R.layout.fragment_transaction_tab, container, false);
         Cursor cursor = DatabaseHandler.getInstance(getActivity()).getAllPropertyTransaction(propertyId);
-
+        registerForContextMenu(rootView);
         // The desired columns to be bound
         String[] columns = new String[] {
                 PropertyTransaction.COL_DATE,
@@ -64,7 +72,6 @@ private long selectedId = -1;
                 PropertyTransaction.COL_PAYEE,
                 PropertyTransaction.COL_AMOUNT,
                 PropertyTransaction.COL_NOTE
-//                CountriesDbAdapter.KEY_REGION
         };
 
         // the XML defined views which the data will be bound to
@@ -88,14 +95,22 @@ private long selectedId = -1;
         ListView listView = (ListView) rootView.findViewById( R.id.listHere );
         // Assign adapter to ListView
         listView.setAdapter(dataAdapter);
-
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
 
 /*****/
+
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> listView, View view,
                                     int position, long id) {
+
+                // Puts item selected to top of view, if possible
+                listView.setSelection(position);
+
+
+
                 // Get the cursor, positioned to the corresponding row in the result set
                 Cursor cursor = (Cursor) listView.getItemAtPosition(position);
 
@@ -113,7 +128,7 @@ private long selectedId = -1;
 
 
             }
-        });
+       });
 
 ////Searchable not working......
         EditText myFilter = (EditText) rootView.findViewById( R.id.myFilter );
@@ -142,21 +157,29 @@ private long selectedId = -1;
         return rootView;
     }
 
-    //Called because we have call back in PropertyDetailFragment
+
+
+
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    public void   onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         for(int i = 1; i <= 10; i++){
             menu.removeItem(i);
         }
 
-        menu.add(menu.NONE, 1, 1, "Edit");//Uho!! How do we do this??
-        menu.add(menu.NONE, 2, 2, "New");
+        menu.add((int)propertyId, 1, 1, "Edit");//Uho!! How do we do this??
+        menu.add((int)propertyId, 2, 2, "New");
     }
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==1) {
+        /**
+         * Edit item
+         */
+        if(item.getItemId()==1 && item.getGroupId()==(int)propertyId) {
             if (selectedId == -1) {
                 //Message user to select a row before edit
                 Toast.makeText(getActivity().getBaseContext(),
@@ -164,40 +187,14 @@ private long selectedId = -1;
                         , Toast.LENGTH_SHORT).show();
             } else {
 
-                /** Probally a better way of doing this, but limited time..**/
-//
-//                PropertyTransaction mItem = new PropertyTransaction();
-//                mItem.id = selectedCursor.getLong(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_ID));
-//                mItem.property = selectedCursor.getLong(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_PROPERTY));
-//                mItem.date = selectedCursor.getString(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_DATE));
-//                mItem.category = selectedCursor.getString(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_CATEGORY));
-//                mItem.payee = selectedCursor.getString(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_PAYEE));
-//                mItem.amount = selectedCursor.getString(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_AMOUNT));
-//                mItem.note = selectedCursor.getString(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_NOTE));
-                //Get selected row
+                final PropertyTransaction newTransaction  = DatabaseHandler.getInstance(getActivity()).getSinglePropertyTransaction(propertyId, selectedId);
 
-                final Cursor selectedCursor = DatabaseHandler.getInstance(getActivity()).getSinglePropertyTransaction(propertyId, selectedId);
-
-//                while (selectedCursor.moveToNext()) {
-//
-//
-//                         Log.d( "Transaction",
-//                                 selectedCursor.getString(selectedCursor.getColumnIndex(PropertyTransaction.COL_ID)) + " " +
-//                                    selectedCursor.getString(selectedCursor.getColumnIndex(PropertyTransaction.COL_PAYEE))
-//                              );
-//                }
-//                selectedCursor.moveToFirst();
-                
-                
-                
-                
-                
-                if (selectedCursor != null) {
+                if (newTransaction != null) {
 
 
                     /****/
                     /**
-                     * Adding transaction via a AlertDialog
+                     * Editing transaction via a AlertDialog
                      */
                     //Alert Dialog Layout
                     LinearLayout layout = new LinearLayout(getActivity());
@@ -209,31 +206,31 @@ private long selectedId = -1;
 
                     final EditText date = new EditText(getActivity());
                     date.setHint("Enter Date");
-                    date.setText(selectedCursor.getString(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_DATE)));
+                    date.setText(newTransaction.date);
                     date.setInputType(InputType.TYPE_CLASS_DATETIME);
                     layout.addView(date);
 
                     final EditText category = new EditText(getActivity());
                     category.setHint("Enter Category");
-                    category.setText(selectedCursor.getString(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_CATEGORY)));
+                    category.setText(newTransaction.category);
                     category.setInputType(InputType.TYPE_CLASS_TEXT);
                     layout.addView(category);
 
                     final EditText payee = new EditText(getActivity());
                     payee.setHint("Enter Payee");
-                    payee.setText(selectedCursor.getString(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_PAYEE)));
+                    payee.setText(newTransaction.payee);
                     payee.setInputType(InputType.TYPE_CLASS_TEXT);
                     layout.addView(payee);
 
                     final EditText amount = new EditText(getActivity());
                     amount.setHint("Enter Amount");
-                    amount.setText(selectedCursor.getString(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_AMOUNT)));
+                    amount.setText(newTransaction.amount);
                     amount.setInputType(InputType.TYPE_CLASS_NUMBER);
                     layout.addView(amount);
 
                     final EditText note = new EditText(getActivity());
                     note.setHint("Enter Notes");
-                    note.setText(selectedCursor.getString(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_NOTE)));
+                    note.setText(newTransaction.note);
                     note.setInputType(InputType.TYPE_CLASS_TEXT);
                     layout.addView(note);
 
@@ -242,29 +239,45 @@ private long selectedId = -1;
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //Build edits
-                            PropertyTransaction newTransaction = new PropertyTransaction();
-                            newTransaction.id = selectedCursor.getLong(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_ID));
-                            newTransaction.property = selectedCursor.getLong(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_PROPERTY));
-                            newTransaction.date = date.getText().toString();
-                            newTransaction.category = category.getText().toString();
-                            newTransaction.payee = payee.getText().toString();
-                            newTransaction.amount = amount.getText().toString();
-                            newTransaction.note = note.getText().toString();
-                            //Update db row
-                            Log.d("TransactionTab", "" + selectedCursor.getLong(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_ID)));
-                            if (DatabaseHandler.getInstance(getActivity()).updatePropertyTransaction(newTransaction)) {
-                                //Message success
-                                Toast.makeText(getActivity().getBaseContext(),
-                                        newTransaction.date + " " + newTransaction.payee + " has been updated"
-                                        , Toast.LENGTH_SHORT).show();
-                                //Update database and list view
-                                updateDatabaseAndList();
+
+//                            newTransaction.id = selectedCursor.getLong(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_ID));
+//                            newTransaction.property = selectedCursor.getLong(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_PROPERTY));
+                            //isValidDate will return null if given formatt is bad
+                            newTransaction.date =  isValidDate( date.getText().toString() );
+//                            newTransaction.category = category.getText().toString();
+//                            newTransaction.payee = payee.getText().toString();
+//                            newTransaction.amount = amount.getText().toString();
+//                            newTransaction.note = note.getText().toString();
+
+
+                            //Verify date input
+                            if(  newTransaction.date  != null ){
+
+
+                                //Update db row
+                                if (DatabaseHandler.getInstance(getActivity()).updatePropertyTransaction(newTransaction)) {
+                                    //Message success
+                                    Toast.makeText(getActivity().getBaseContext(),
+                                            newTransaction.date + " " + newTransaction.payee + " has been updated"
+                                            , Toast.LENGTH_SHORT).show();
+                                    //Update database and list view
+                                    updateDatabaseAndList();
+                                }
+                                //Message un-successfull
+                                else {
+                                    Toast.makeText(getActivity().getBaseContext(),
+                                            newTransaction.date + " " + newTransaction.payee + " has failed to updated"
+                                            , Toast.LENGTH_SHORT).show();
+                                }
+                                dialog.cancel();
+
+
                             }
-                            //Message un-successfull
-                            else {
+                            else
+                            {
                                 Toast.makeText(getActivity().getBaseContext(),
-                                        newTransaction.date + " " + newTransaction.payee + " has failed to updated"
-                                        , Toast.LENGTH_SHORT).show();
+                                        newTransaction.date + " needs to be in \"yyyy/MM/dd\" format"
+                                        , Toast.LENGTH_LONG).show();
                             }
 
 
@@ -289,92 +302,97 @@ private long selectedId = -1;
 
             }
         }
-         else if (item.getItemId() == 2){//New transaction...
+         else {
+            if (item.getItemId() == 2 &&
+                            item.getGroupId() == (int) propertyId) {//New transaction...
 /**
  * Adding transaction via a AlertDialog, should have built xml by now!
  */
-            //Alert Dialog Layout
-            LinearLayout layout = new LinearLayout(getActivity());
-            layout.setOrientation(LinearLayout.VERTICAL);
+                //Alert Dialog Layout
+                LinearLayout layout = new LinearLayout(getActivity());
+                layout.setOrientation(LinearLayout.VERTICAL);
 
-            //Alert Dialog builder
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Enter New Transaction");
+                //Alert Dialog builder
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Enter New Transaction");
 
-            final EditText date = new EditText(getActivity());
-            date.setHint("Enter Date");
-            date.setInputType(InputType.TYPE_CLASS_DATETIME);
-            layout.addView(date);
+                final EditText date = new EditText(getActivity());
+                date.setHint("Enter Date");
+                date.setInputType(InputType.TYPE_CLASS_DATETIME);
+                layout.addView(date);
 
-            final  EditText category = new EditText(getActivity());
-            category.setHint("Enter Category");
-            category.setInputType(InputType.TYPE_CLASS_TEXT);
-            layout.addView(category);
+                final EditText category = new EditText(getActivity());
+                category.setHint("Enter Category");
+                category.setInputType(InputType.TYPE_CLASS_TEXT);
+                layout.addView(category);
 
-            final  EditText payee = new EditText(getActivity());
-            payee.setHint("Enter Payee");
-            payee.setInputType(InputType.TYPE_CLASS_TEXT);
-            layout.addView(payee);
+                final EditText payee = new EditText(getActivity());
+                payee.setHint("Enter Payee");
+                payee.setInputType(InputType.TYPE_CLASS_TEXT);
+                layout.addView(payee);
 
-            final  EditText amount = new EditText(getActivity());
-            amount.setHint("Enter Amount");
-            amount.setInputType(InputType.TYPE_CLASS_NUMBER);
-            layout.addView(amount);
+                final EditText amount = new EditText(getActivity());
+                amount.setHint("Enter Amount");
+                amount.setInputType(InputType.TYPE_CLASS_NUMBER);
+                layout.addView(amount);
 
-            final  EditText note = new EditText(getActivity());
-            note.setHint("Enter Notes");
-            note.setInputType(InputType.TYPE_CLASS_TEXT);
-            layout.addView(note);
+                final EditText note = new EditText(getActivity());
+                note.setHint("Enter Notes");
+                note.setInputType(InputType.TYPE_CLASS_TEXT);
+                layout.addView(note);
 
-            //Set up save button
-            builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    PropertyTransaction newTransaction = new PropertyTransaction();
-                    newTransaction.property = propertyId;
-                    newTransaction.date = date.getText().toString();
-                    newTransaction.category = category.getText().toString();
-                    newTransaction.payee = payee.getText().toString();
-                    newTransaction.amount = amount.getText().toString();
-                    newTransaction.note = note.getText().toString();
-                    //if() databasetransaction not null, go for it..
-                    if( DatabaseHandler.getInstance(getActivity()).putPropertyTransaction(newTransaction) ){
-                        //Message item was entered into database
-                        Toast.makeText(getActivity().getBaseContext(),
-                                newTransaction.date + " " + newTransaction.payee + " added.", Toast.LENGTH_SHORT).show();
-                        //Update database
-                        updateDatabaseAndList();
-//                        Cursor cursor = DatabaseHandler.getInstance(getActivity()).getAllPropertyTransaction(propertyId);
-//                        //Refresh list view
-//                        ListView list = (ListView) getActivity().findViewById(R.id.listHere);
-//                        SimpleCursorAdapter newer = (SimpleCursorAdapter) list.getAdapter();
-//                        newer.changeCursor(cursor);
+                //Set up save button
+                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        PropertyTransaction newTransaction = new PropertyTransaction();
+                        newTransaction.property = propertyId;
+                        newTransaction.date = date.getText().toString();
+                        newTransaction.category = category.getText().toString();
+                        newTransaction.payee = payee.getText().toString();
+                        newTransaction.amount = amount.getText().toString();
+                        newTransaction.note = note.getText().toString();
+//Error check for date
+                        if( isValidDate( date.getText().toString() ) == null) {
+                            Toast.makeText(getActivity().getBaseContext(),
+                                    newTransaction.date + " needs to be in \"yyyy/MM/dd\" format"
+                                    , Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        //if() databasetransaction not null, go for it..
+                        if (DatabaseHandler.getInstance(getActivity()).putPropertyTransaction(newTransaction)) {
+                            //Message item was entered into database
+                            Toast.makeText(getActivity().getBaseContext(),
+                                    newTransaction.date + " " + newTransaction.payee + " added.", Toast.LENGTH_SHORT).show();
+                            //Update database
+                            updateDatabaseAndList();
+
+                        } else {
+                            //Message that item was not entered into database
+                            Toast.makeText(getActivity().getBaseContext(),
+                                    newTransaction.date + " " + newTransaction.payee
+                                            + " failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        dialog.cancel();
+
+
                     }
-                    else{
-                        //Message that item was not entered into database
-                        Toast.makeText(getActivity().getBaseContext(),
-                                newTransaction.date + " " + newTransaction.payee
-                                        + " failed.",
-                                Toast.LENGTH_SHORT).show();
+                });
+                //Set up cancel button
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
                     }
+                });
+                builder.setView(layout);
+                builder.show();
 
-
-
-                }
-            });
-            //Set up cancel button
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            builder.setView(layout);
-            builder.show();
-
-        }
-        else{
-            Log.d("FragmentTransactionTab", "Not defined menu item: "+item.getItemId());
+            } else {
+                Log.d("FragmentTransactionTab", "Not defined menu item: " + item.getItemId() + " group: " + item.getGroupId());
+            }
         }
 
 
@@ -396,5 +414,33 @@ private long selectedId = -1;
         SimpleCursorAdapter newer = (SimpleCursorAdapter) list.getAdapter();
         newer.changeCursor(cursor);
     }
+
+    /**
+     * Vaidate date. Needed for reports.
+     * @param
+     * @return
+     */
+    private String isValidDate(String date) {
+        SimpleDateFormat df1 = new SimpleDateFormat("yyyy/dd/MM");
+        Date d = null;
+        String s = null;
+        try {
+           d = df1.parse(date);
+
+
+        }catch (Exception e1) {
+
+            return null;
+        }
+
+        s = df1.format(d);
+//        if(date.equals(s))
+            return s;
+//        else
+//            return null;
+    }
+
+
+
 
 }

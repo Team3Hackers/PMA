@@ -12,11 +12,13 @@
         android:hint="Payee's full name"/>
 
     <ListView android:id="@+id/listHere"  android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"
+        android:choiceMode="singleChoice"
+        />
+
 
 </LinearLayout>
-
-<!--<requestFocus />-->
+<!--can change color by following the bg_key-->
 
 
 

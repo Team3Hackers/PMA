@@ -3,6 +3,7 @@ package com.project.group4.propertymanagerassistant;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
@@ -46,7 +47,8 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
         Fragment fragment = null;
         switch (i) {
             case 0:
-           fragment = new FragmentTransactionTab();
+           
+                fragment = new FragmentTransactionTab();
 //                fragment = new FragmentReportTab();
 
             break;
