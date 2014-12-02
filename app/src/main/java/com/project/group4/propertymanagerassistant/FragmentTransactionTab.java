@@ -47,7 +47,7 @@ private long selectedId = -1;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+Log.d("FragTrans", "onCreate");
         setHasOptionsMenu(true);
         if (savedInstanceState!=null){
             propertyId = savedInstanceState.getLong(PropertyDetailFragment.ARG_ITEM_ID);
@@ -56,6 +56,12 @@ private long selectedId = -1;
             propertyId = getArguments().getLong(PropertyDetailFragment.ARG_ITEM_ID);
         }
 
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d("FragTrans", "onDestroy");
+        super.onDestroy();
     }
 
     @Override

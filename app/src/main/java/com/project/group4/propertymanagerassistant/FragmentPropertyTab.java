@@ -190,7 +190,8 @@ public class FragmentPropertyTab extends Fragment implements /*FragmentLifecycle
         updatePropertyFromUI();
 
        saveButton.setVisibility(View.GONE);
-        Toast.makeText(getActivity(), mItem.address + " saved to database", Toast.LENGTH_SHORT).show();
+       if(mItem!=null)//Sometimes we loose mItem?
+            Toast.makeText(getActivity(), mItem.address + " saved to database", Toast.LENGTH_SHORT).show();
     }
 
 //    @Override

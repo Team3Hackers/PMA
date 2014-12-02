@@ -132,7 +132,7 @@ android:layout_height="fill_parent" >
     <Button
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/property_save_button"
+        android:id="@+id/tenant_save_button"
         android:text="Save" />
 
 </LinearLayout>

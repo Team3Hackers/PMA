@@ -3,6 +3,7 @@ package com.project.group4.propertymanagerassistant;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -20,7 +21,7 @@ import java.util.Calendar;
 /**
  * Created by benhoelzel on 10/26/14.
  */
-public class FragmentReportTab extends Fragment /*implements  FragmentLifecycle*/{
+public class FragmentReportTab extends Fragment /*implements  FragmentLifecycle*/ {
 
     long propertyId;
 
@@ -28,10 +29,9 @@ public class FragmentReportTab extends Fragment /*implements  FragmentLifecycle*
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        if(savedInstanceState==null){
+        if (savedInstanceState == null) {
             propertyId = getArguments().getLong(PropertyDetailFragment.ARG_ITEM_ID);
-        }
-        else{
+        } else {
             propertyId = savedInstanceState.getLong(PropertyDetailFragment.ARG_ITEM_ID);
         }
     }
@@ -63,30 +63,40 @@ public class FragmentReportTab extends Fragment /*implements  FragmentLifecycle*
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        for(int i = 1; i <= 10; i++){
+        for (int i = 1; i <= 10; i++) {
             menu.removeItem(i);
         }
-        menu.add((int)propertyId, 10, 10, "Report Filter");
+        menu.add((int) propertyId, 10, 10, "Report Filter");
     }
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==10  && item.getGroupId()==(int)propertyId){
+        if (item.getItemId() == 10 && item.getGroupId() == (int) propertyId) {
 
+//Last display
+            DialogFragment tranactionPayeeDialog = new GetPropertyTransactionPayee();
+            tranactionPayeeDialog.show(getActivity().getSupportFragmentManager(), "payeeSelector");
 
-            DialogFragment endDateFragment = new EndDatePickerFragment();
-            endDateFragment.show(getActivity().getSupportFragmentManager() , "datePicker");
+            DialogFragment tranactionTypeDialog = new GetPropertyTransactionTypes();
+            tranactionTypeDialog.show(getActivity().getSupportFragmentManager(), "typeSelector");
 
-            DialogFragment startDateFragment = new StartDatePickerFragment();
-            startDateFragment.show(getActivity().getSupportFragmentManager() , "datePicker");
+            DialogFragment endDateDialog = new EndDatePickerFragment();
+            endDateDialog.show(getActivity().getSupportFragmentManager(), "datePicker");
+
+            DialogFragment startDateDialog = new StartDatePickerFragment();
+            startDateDialog.show(getActivity().getSupportFragmentManager(), "datePicker");
+//End Display, perform query
+
+//Display results in fragment
+
 
         }
         return super.onOptionsItemSelected(item);
     }
+
     /**
-     *  Select payee alert dialog
-     *
+     * Select payee alert dialog
      */
 //    @Override
 //    public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -101,6 +111,45 @@ public class FragmentReportTab extends Fragment /*implements  FragmentLifecycle*
 //                });
 //        return builder.create();
 //    }
+
+    /**
+     * Dialog for retriveng type filter
+     */
+        public static class GetPropertyTransactionTypes extends DialogFragment {
+
+
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Select Transaction Type Filter")
+                    .setItems(new String[]{"One", "Two","One", "Two","One", "Two","One", "Two","One", "Two","One", "Two","One", "Two" }, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // The 'which' argument contains the index position
+                            // of the selected item
+                        }
+                    });
+            return builder.create();
+        }
+    }
+
+    /**
+     * Dialog for getting payee filter
+     */
+
+    public static class GetPropertyTransactionPayee extends DialogFragment {
+
+
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Select Transaction Payee Filter")
+                    .setItems(new String[]{"One", "Two","One", "Two","One", "Two","One", "Two","One", "Two","One", "Two","One", "Two" }, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // The 'which' argument contains the index position
+                            // of the selected item
+                        }
+                    });
+            return builder.create();
+        }
+    }
 
     /**
      *  Date picker inner class
@@ -159,6 +208,9 @@ public class FragmentReportTab extends Fragment /*implements  FragmentLifecycle*
             Log.d("TEST", "End date: "+test);
         }
     }
+
+
+
 
 
 }

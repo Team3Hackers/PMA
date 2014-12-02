@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
+import android.view.ViewGroup;
 
 
 class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepageradptapter
@@ -35,11 +36,18 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
         this.bundle = args;
     }
 
-
-
-
-
-
+////This show the fragmentent count spiking, but thats because we dont rid the old view pager..
+//    @Override
+//    public Object instantiateItem(ViewGroup container, int position) {
+//        Log.d("CRAP!", ""+container.getChildCount() + " "+ position);
+//        return super.instantiateItem(container, position);
+//    }
+//
+//    @Override
+//    public void destroyItem(ViewGroup container, int position, Object object) {
+//        super.destroyItem(container, position, object);
+//        Log.d("CRAP!", "destroy here");
+//    }
 
     //return current fragment
     @Override
@@ -49,6 +57,7 @@ class TabAdapter extends FragmentStatePagerAdapter {//to save state, use statepa
             case 0:
            
                 fragment = new FragmentTransactionTab();
+
 //                fragment = new FragmentReportTab();
 
             break;

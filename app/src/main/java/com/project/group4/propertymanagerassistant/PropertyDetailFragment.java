@@ -46,7 +46,7 @@ public class PropertyDetailFragment extends Fragment{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {super.onCreate(savedInstanceState);
-
+        Log.d("PropDetailFrag" , "onCreate");
 
        }
 /**----------------**/
@@ -90,11 +90,10 @@ public class PropertyDetailFragment extends Fragment{
             Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.view_tab_pager, container, false);
-        viewPager = (ViewPager) rootView.findViewById(R.id.pager);//get pager from app xml, need to assign it to current view
 
 
-           myTabAdapter = new TabAdapter(getFragmentManager());
-
+         viewPager = (ViewPager) rootView.findViewById(R.id.pager);//
+         myTabAdapter = new TabAdapter(this.getChildFragmentManager());//USE CHILD MANAGER!!!!
 
         /**
          * Here, I pass the selected ID from the list to the adaptor.
@@ -103,7 +102,7 @@ public class PropertyDetailFragment extends Fragment{
          * There is a better way to do this, but I suck.
          * Should be able to use bundle like we did here. To be continued...
          */
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
+        if (getArguments() != null ) {
             myTabAdapter.setId(getArguments().getLong(ARG_ITEM_ID), getArguments().getBoolean(ARG_ITEM_NEW));//Send ID to adaptor to have the property id for all fragments
 
         }
@@ -131,8 +130,15 @@ public class PropertyDetailFragment extends Fragment{
         return rootView;
     }
 
+    @Override
+    public void onDestroy() {
+        Log.d("PropDetailFrag" , "onDestroy");
 
+        super.onDestroy();
+    }
 
-
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }

@@ -63,7 +63,7 @@ private boolean test = false;
             // activity should be in two-pane mode.
             mTwoPane = true;
             //Force to landscape because I cant fix this shit!
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 
             // In two-pane mode, list items should be given the
             // 'activated' state when touched.
@@ -101,23 +101,29 @@ private boolean test = false;
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
-Log.d("Crap", ""+getSupportFragmentManager().findFragmentByTag("test"));
+//Log.d("Crap", ""+getSupportFragmentManager().findFragmentByTag("test"));
+/**
+ * try to remove this..
+ */
+//            //Check for old, not in view, and delete it....this is not working
+//            if (getSupportFragmentManager().findFragmentByTag("test")!=null){
+////               Log.d("Crap", "Remove this!");
+//                getSupportFragmentManager().beginTransaction().detach(getSupportFragmentManager().findFragmentByTag("test")).commit();
+//
+//            }
 
-            //Check for old, not in view, and delete it....this is not working
-            if (getSupportFragmentManager().findFragmentByTag("test")!=null){
-               Log.d("Crap", "Remove this!");
-                getSupportFragmentManager().beginTransaction().detach(getSupportFragmentManager().findFragmentByTag("test")).commit();
+            //
+            PropertyDetailFragment fragment = new PropertyDetailFragment();//
+            getSupportFragmentManager().popBackStack(null, getSupportFragmentManager().POP_BACK_STACK_INCLUSIVE);
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction().replace(R.id.property_detail_container, fragment).addToBackStack(null).commit();
+            //
+//                PropertyDetailFragment fragment = new PropertyDetailFragment();//
+//                fragment.setArguments(arguments);
 
-            }
-           // invalidateOptionsMenu();
-
-Log.d("Crap", ""+getSupportFragmentManager().findFragmentByTag("test"));
-                PropertyDetailFragment fragment = new PropertyDetailFragment();//
-                fragment.setArguments(arguments);
-
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.property_detail_container, fragment, "test")
-                        .commit();
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.property_detail_container, fragment, "test")
+//                        .commit();
 
 
                 //Dont create new , replace existing

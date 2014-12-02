@@ -69,7 +69,7 @@ public class FragmentTenantTab extends Fragment implements View.OnClickListener 
         //Button to save.
 //        this.propertyId = savedInstanceState.getLong("item_id");
 //        this.newProperty = savedInstanceState.getBoolean("new_property", false);
-        saveButton = (Button) view.findViewById(R.id.property_save_button);
+        saveButton = (Button) view.findViewById(R.id.tenant_save_button);
         saveButton.setOnClickListener(this);
 //        if(newProperty)//new propert only, everyone else is a edit
 //            newTenant = true;//Set the new tenant flag

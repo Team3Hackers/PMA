@@ -190,14 +190,17 @@ public class FragmentOwnerTab extends Fragment implements View.OnClickListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        saveButton.setVisibility(View.VISIBLE);
 
         if (item.getItemId()==7) {
             newOwner = false;//Not a new owner, leave active flag alone...
+            saveButton.setVisibility(View.VISIBLE);
+
         }
         else if (item.getItemId() == 8) {
             newOwner = true;//Used as new owner flag in onClick method
             tempItem = mItem;
+            saveButton.setVisibility(View.VISIBLE);
+
             //mItem.ownerActive = "0";//disable old owners status
             //updateOwnerFromUI();//Update old owners status
         }
