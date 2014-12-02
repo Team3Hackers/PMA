@@ -10,36 +10,54 @@ package com.project.group4.propertymanagerassistant;
 public final class R {
     public static final class attr {
     }
+    public static final class color {
+        public static final int default_color=0x7f040000;
+        public static final int pressed_color=0x7f040001;
+    }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int bg_key=0x7f020000;
+        public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
-        public static final int editMenuItem=0x7f070014;
-        public static final int editProperty=0x7f070017;
-        public static final int editTenant=0x7f070018;
-        public static final int file=0x7f070015;
-        public static final int newProperty=0x7f070016;
-        public static final int newPropertyItem=0x7f070019;
-        public static final int owner_detail=0x7f070002;
-        public static final int owner_root_frame=0x7f070010;
-        public static final int owner_save_button=0x7f07000a;
-        public static final int pager=0x7f070012;
-        public static final int property_detail=0x7f07000b;
-        public static final int property_detail_container=0x7f070000;
-        public static final int property_list=0x7f070001;
-        public static final int property_save_button=0x7f07000d;
-        public static final int tenant_root_frame=0x7f070011;
-        public static final int textAddress=0x7f070005;
-        public static final int textCity=0x7f070006;
-        public static final int textFico=0x7f07000f;
-        public static final int textFirstName=0x7f070004;
-        public static final int textLastName=0x7f070003;
-        public static final int textPhone=0x7f070009;
-        public static final int textState=0x7f070007;
-        public static final int textUnit=0x7f07000c;
-        public static final int textView=0x7f07000e;
-        public static final int textZip=0x7f070008;
-        public static final int title=0x7f070013;
+        public static final int amount=0x7f08001b;
+        public static final int category=0x7f080019;
+        public static final int date=0x7f080018;
+        public static final int editMenuItem=0x7f080021;
+        public static final int editProperty=0x7f080024;
+        public static final int editTenant=0x7f080025;
+        public static final int file=0x7f080022;
+        public static final int listHere=0x7f080012;
+        public static final int listView=0x7f08000f;
+        public static final int myFilter=0x7f080011;
+        public static final int newProperty=0x7f080023;
+        public static final int newPropertyItem=0x7f080026;
+        public static final int note=0x7f08001c;
+        public static final int owner_detail=0x7f080002;
+        public static final int owner_root_frame=0x7f08001d;
+        public static final int owner_save_button=0x7f08000a;
+        public static final int pager=0x7f08001f;
+        public static final int payee=0x7f08001a;
+        public static final int property_detail=0x7f08000b;
+        public static final int property_detail_container=0x7f080000;
+        public static final int property_list=0x7f080001;
+        public static final int property_save_button=0x7f08000d;
+        public static final int tenant_root_frame=0x7f08001e;
+        public static final int test=0x7f08000e;
+        public static final int textAddress=0x7f080005;
+        public static final int textCity=0x7f080006;
+        public static final int textFico=0x7f080010;
+        public static final int textFirstName=0x7f080004;
+        public static final int textLastName=0x7f080003;
+        public static final int textPhone=0x7f080009;
+        public static final int textState=0x7f080007;
+        public static final int textUnit=0x7f08000c;
+        public static final int textView1=0x7f080013;
+        public static final int textView2=0x7f080014;
+        public static final int textView3=0x7f080015;
+        public static final int textView4=0x7f080016;
+        public static final int textView5=0x7f080017;
+        public static final int textZip=0x7f080008;
+        public static final int title=0x7f080020;
     }
     public static final class layout {
         public static final int activity_property_detail=0x7f030000;
@@ -50,23 +68,24 @@ public final class R {
         public static final int fragment_report_tab=0x7f030005;
         public static final int fragment_tenant_tab=0x7f030006;
         public static final int fragment_transaction_tab=0x7f030007;
-        public static final int root_fragment_owner=0x7f030008;
-        public static final int root_fragment_tenant=0x7f030009;
-        public static final int static_fragment=0x7f03000a;
-        public static final int view_tab_pager=0x7f03000b;
+        public static final int property_transaction_info=0x7f030008;
+        public static final int root_fragment_owner=0x7f030009;
+        public static final int root_fragment_tenant=0x7f03000a;
+        public static final int static_fragment=0x7f03000b;
+        public static final int view_tab_pager=0x7f03000c;
     }
     public static final class menu {
-        public static final int edit_item=0x7f060000;
-        public static final int list_activity=0x7f060001;
-        public static final int list_activity_small=0x7f060002;
+        public static final int edit_item=0x7f070000;
+        public static final int list_activity=0x7f070001;
+        public static final int list_activity_small=0x7f070002;
     }
     public static final class string {
-        public static final int app_name=0x7f040000;
-        public static final int title_property_detail=0x7f040001;
+        public static final int app_name=0x7f050000;
+        public static final int title_property_detail=0x7f050001;
     }
     public static final class style {
         /**  Customize your theme here. 
          */
-        public static final int AppTheme=0x7f050000;
+        public static final int AppTheme=0x7f060000;
     }
 }
