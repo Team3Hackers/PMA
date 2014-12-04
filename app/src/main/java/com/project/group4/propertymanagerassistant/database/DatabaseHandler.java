@@ -106,7 +106,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         propertyTransaction.property = propertyId;
         propertyTransaction.amount = "50.00";
         propertyTransaction.category = "Maintenance";
-        propertyTransaction.date = "05/11/2014";
+        propertyTransaction.date = "2014-11-05";
         propertyTransaction.payee = "Al's Gardening";
         propertyTransaction.note = "Monthly yard maintenance";
         db.insert(PropertyTransaction.TABLE_NAME, null, propertyTransaction.getContent());
@@ -156,7 +156,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.insert(OwnerActive.TABLE_NAME, null, currentOwner.getContent());
 
         //Default
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/dd/MM");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
 
 
@@ -878,7 +878,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         else{
 
-            return cursor;
+            return cursor;//TODO: Do i need to close these cursors...
+        }
+
+    }
+
+    /***
+     * Very specific query for report
+     * Sorts desc on date
+     *
+     *
+     */
+    public synchronized Cursor getAllPropertyTransactionWithUniqOnSearchToken(final long id, String searchToken) {
+        final SQLiteDatabase db = this.getReadableDatabase();
+        final Cursor cursor = db.query(true,PropertyTransaction.TABLE_NAME, new String[] {searchToken},
+                PropertyTransaction.COL_PROPERTY + " IS ? ", new String[] { String.valueOf(id) },
+                null, null,PropertyTransaction.COL_DATE + " DESC ", null);
+
+
+        if (cursor == null || cursor.isAfterLast()) {
+            return null;
+        }
+        else{
+
+            return cursor;//TODO: Do i need to close these cursors...
         }
 
     }
@@ -907,6 +930,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return cursor;
         }
     }
+//    public synchronized Cursor getAllPropertyTransactionPayees(final long id) {
+//        final SQLiteDatabase db = this.getReadableDatabase();
+//        final Cursor cursor = db.query(true, PropertyTransaction.TABLE_NAME, new String {PropertyTransaction.COL_ID,  },
+//                PropertyTransaction.COL_PROPERTY + " IS ? ", new String[] { String.valueOf(id) },
+//                null, null,PropertyTransaction.COL_DATE + " DESC ", null);
+//
+//
+//        if (cursor == null || cursor.isAfterLast()) {
+//            return null;
+//        }
+//        else{
+//
+//            return cursor;
+//        }
+//
+//    }
 
     public synchronized boolean putPropertyTransaction(final PropertyTransaction propertyTransaction) {
         boolean success = false;
@@ -959,6 +998,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         return success;
     }
+
+
+
 
     public synchronized int removePropertyTransaction(final PropertyTransaction propertyTransaction) {
         final SQLiteDatabase db = this.getWritableDatabase();

@@ -3,6 +3,7 @@ package com.project.group4.propertymanagerassistant;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -105,34 +106,22 @@ private boolean test = false;
 /**
  * try to remove this..
  */
-//            //Check for old, not in view, and delete it....this is not working
-//            if (getSupportFragmentManager().findFragmentByTag("test")!=null){
-////               Log.d("Crap", "Remove this!");
-//                getSupportFragmentManager().beginTransaction().detach(getSupportFragmentManager().findFragmentByTag("test")).commit();
-//
-//            }
 
-            //
-            PropertyDetailFragment fragment = new PropertyDetailFragment();//
-            getSupportFragmentManager().popBackStack(null, getSupportFragmentManager().POP_BACK_STACK_INCLUSIVE);
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction().replace(R.id.property_detail_container, fragment).addToBackStack(null).commit();
-            //
-//                PropertyDetailFragment fragment = new PropertyDetailFragment();//
-//                fragment.setArguments(arguments);
+        //Test-this wrked
+//            PropertyDetailFragment fragment = new PropertyDetailFragment();//
+//            getSupportFragmentManager().popBackStack(null, getSupportFragmentManager().POP_BACK_STACK_INCLUSIVE);
+//            fragment.setArguments(arguments);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.property_detail_container, fragment).addToBackStack(null).commit();
+            //OG
+                PropertyDetailFragment fragment = new PropertyDetailFragment();//
+                fragment.setArguments(arguments);
 
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.property_detail_container, fragment, "test")
-//                        .commit();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.property_detail_container, fragment, "test")
+                        .commit();
 
 
-                //Dont create new , replace existing
-//                PropertyDetailFragment newfragment = (PropertyDetailFragment) getSupportFragmentManager().findFragmentByTag("test");//
-//                newfragment.setArguments(arguments);
-//
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.property_detail_container, newfragment, "test")
-//                        .commit();
+
 
 
         } else {
@@ -198,4 +187,8 @@ private boolean test = false;
     }
 
 
+//    @Override
+//    public void onClickItem(DialogFragment dialog) {
+//
+//    }
 }

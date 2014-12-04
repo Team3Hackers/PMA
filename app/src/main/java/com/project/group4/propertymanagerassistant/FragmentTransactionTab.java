@@ -282,7 +282,7 @@ Log.d("FragTrans", "onCreate");
                             else
                             {
                                 Toast.makeText(getActivity().getBaseContext(),
-                                        newTransaction.date + " needs to be in \"yyyy/MM/dd\" format"
+                                        newTransaction.date + " needs to be in "+ FragmentReportTab.DATE_FORMAT + " format"
                                         , Toast.LENGTH_LONG).show();
                             }
 

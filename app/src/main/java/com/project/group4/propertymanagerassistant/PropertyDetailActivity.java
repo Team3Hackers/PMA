@@ -3,6 +3,7 @@ package com.project.group4.propertymanagerassistant;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentActivity;
@@ -12,6 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -23,7 +27,7 @@ import android.view.MenuItem;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link PropertyDetailFragment}.
  */
-public class PropertyDetailActivity extends FragmentActivity  {
+public class PropertyDetailActivity extends FragmentActivity {
 
 
     @Override
@@ -71,7 +75,7 @@ public class PropertyDetailActivity extends FragmentActivity  {
 
             FragmentManager fragmentManager = getSupportFragmentManager();//get frag manager
 
-            fragmentManager.beginTransaction().add(R.id.property_detail_container, fragment).commit();//set it
+            fragmentManager.beginTransaction().add(R.id.property_detail_container, fragment, "test").commit();//set it
 
         }
     }
@@ -93,6 +97,7 @@ public class PropertyDetailActivity extends FragmentActivity  {
         return result;
 //        //return super.onOptionsItemSelected(item);
     }
+
 
 
 }
