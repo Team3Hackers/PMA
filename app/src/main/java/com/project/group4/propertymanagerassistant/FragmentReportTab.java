@@ -71,7 +71,7 @@ public class FragmentReportTab extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_report_tab, container, false);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat(FragmentReportTab.DATE_FORMAT);
         Calendar cal = Calendar.getInstance();
 
 
@@ -311,22 +311,7 @@ public class FragmentReportTab extends Fragment {
         }
 
 
-//        Date d = null;
-//        String s = null;
-//        try {
-//            d = df1.parse(date);
-//
-//
-//        }catch (Exception e1) {
-//
-//            return null;
-//        }
-//
-//        s = df1.format(d);
-////        if(date.equals(s))
-//        return s;
-////        else
-////            return null;
+
 
 
 
@@ -509,11 +494,6 @@ public class FragmentReportTab extends Fragment {
         } // onDateSet
     }; // OnDateSetListener ------------------------------------------------------
 
-//    @Override
-//    public void onClickItem(String incoming) {
-////        catergory = incoming;
-////        Log.d("Clicked", ""+catergory);
-//    }
 
     private String dateFormater(int year, int month, int day){
         String date = year + "-" + month + "-" + day;
@@ -530,71 +510,6 @@ public class FragmentReportTab extends Fragment {
 
     }
 
-//    public static class GetPropertyTransactionTypes extends DialogFragment {
-//            private DialogClickListener callback;
-//
-//            @Override
-//            public void onCreate(Bundle savedInstanceState) {
-//                super.onCreate(savedInstanceState);
-//
-//                try {
-//                    callback = (DialogClickListener) getTargetFragment();
-//                } catch (ClassCastException e) {
-//                    throw new ClassCastException("Calling fragment must implement DialogClickListener interface");
-//                }
-//            }
-//
-//            public Dialog onCreateDialog(Bundle savedInstanceState) {
-//
-//
-//
-//
-//
-//            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//
-//                Cursor cursor = DatabaseHandler.
-//                        getInstance(getActivity()).
-//                        getAllPropertyTransactionWithUniqOnSearchToken(getArguments().getLong(PropertyDetailFragment.ARG_ITEM_ID),
-//                                PropertyTransaction.COL_CATEGORY);
-//
-//                //Had to transfer to arraylist to add "None" element
-//                final ArrayList<String> categoryList = new ArrayList<String>();
-//                if(cursor != null) {
-//                    while (cursor.moveToNext()) {
-//
-//                        categoryList.add(cursor.getString(cursor.getColumnIndex( PropertyTransaction.COL_CATEGORY )));
-//                    }
-//                    categoryList.add("None");
-//                }
-//                else{
-//                    categoryList.add("No category listed");
-//                }
-//
-//                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-//                        getActivity(),
-//                        android.R.layout.simple_list_item_1,
-//                        categoryList );
-//                builder.setTitle("Select A Category");
-//                builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-//
-//
-//                public void onClick(DialogInterface dialog, int which) {
-//                    //Send in method,,,,
-//                    Log.d("shit", "="+ arrayAdapter.getItem(which));
-//
-//                    String msg = arrayAdapter.getItem(which);
-//                    callback.onClickItem(msg);
-//                    //TODO: Add the onclick function
-//                    // The 'which' argument contains the index position
-//                    // of the selected item
-//                }
-//            });
-//
-//            return builder.create();
-//        }
-//
-//
-//    }
 
 
 }

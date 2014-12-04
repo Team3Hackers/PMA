@@ -908,18 +908,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public synchronized Cursor fetchPayeeByName(String searchToken, final long id){
         final SQLiteDatabase db = this.getReadableDatabase();
-        final Cursor cursor = db.query(PropertyTransaction.TABLE_NAME, PropertyTransaction.FIELDS,
-                PropertyTransaction.COL_PROPERTY + " IS ? AND " + PropertyTransaction.COL_PAYEE + " IS ? ",
-                new String[] { String.valueOf(id), searchToken },
-                null, null, null, null);
-        while (cursor.moveToNext()) {
-//test search....
-            Log.d("WTF",
-
-                    cursor.getString(cursor.getColumnIndex(PropertyTransaction.COL_PAYEE)) + " " +
-                            cursor.getString(cursor.getColumnIndex(PropertyTransaction.COL_AMOUNT))
-            );
-        }
+//        final Cursor cursor = db.query(PropertyTransaction.TABLE_NAME, PropertyTransaction.FIELDS,
+//                PropertyTransaction.COL_PROPERTY + " IS ? AND " + PropertyTransaction.COL_PAYEE + " LIKE  %?%",
+//                new String[] { String.valueOf(id), searchToken },
+//                null, null, null, null);
+        final Cursor cursor = db.rawQuery("SELECT * FROM " + PropertyTransaction.TABLE_NAME + " WHERE " +
+                PropertyTransaction.COL_PROPERTY + " = " + id +
+                        " AND " + PropertyTransaction.COL_PAYEE + " LIKE  '%" + searchToken +"%'", null);
+//        while (cursor.moveToNext()) {
+////test search....
+//            Log.d("WTF",
+//
+//                    cursor.getString(cursor.getColumnIndex(PropertyTransaction.COL_PAYEE)) + " " +
+//                            cursor.getString(cursor.getColumnIndex(PropertyTransaction.COL_AMOUNT))
+//            );
+//        }
 
 
         if (cursor == null || cursor.isAfterLast()) {

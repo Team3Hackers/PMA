@@ -151,12 +151,17 @@ Log.d("FragTrans", "onCreate");
 
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count)
-            {dataAdapter.getFilter().filter(s.toString());}
+            {
+                 dataAdapter.getFilter().filter(s.toString());
+            }
         });
 
         dataAdapter.setFilterQueryProvider(new FilterQueryProvider() {
             public Cursor runQuery(CharSequence constraint) {
+
                 return DatabaseHandler.getInstance(getActivity()).fetchPayeeByName(constraint.toString(), propertyId);
+
+
             }
         });
 
@@ -361,7 +366,7 @@ Log.d("FragTrans", "onCreate");
 //Error check for date
                         if( isValidDate( date.getText().toString() ) == null) {
                             Toast.makeText(getActivity().getBaseContext(),
-                                    newTransaction.date + " needs to be in \"yyyy/MM/dd\" format"
+                                    newTransaction.date + " needs to be in "+ FragmentReportTab.DATE_FORMAT +" format"
                                     , Toast.LENGTH_LONG).show();
                             return;
                         }
@@ -421,13 +426,14 @@ Log.d("FragTrans", "onCreate");
         newer.changeCursor(cursor);
     }
 
+
     /**
      * Vaidate date. Needed for reports.
      * @param
      * @return
      */
     private String isValidDate(String date) {
-        SimpleDateFormat df1 = new SimpleDateFormat("yyyy/dd/MM");
+        SimpleDateFormat df1 = new SimpleDateFormat(FragmentReportTab.DATE_FORMAT);
         Date d = null;
         String s = null;
         try {
