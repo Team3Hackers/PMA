@@ -148,7 +148,7 @@ public class FragmentPropertyTab extends Fragment implements /*FragmentLifecycle
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        for(int i = 1; i <= 10; i++){
+        for(int i = 1; i <= PropertyDetailFragment.ITEM_COUNT; i++){
             menu.removeItem(i);
         }
         menu.add((int)propertyId, 3, 3, "Edit");

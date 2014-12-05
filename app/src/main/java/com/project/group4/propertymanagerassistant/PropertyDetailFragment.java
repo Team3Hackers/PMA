@@ -26,7 +26,10 @@ public class PropertyDetailFragment extends Fragment{
      */
     public static final String ARG_ITEM_NEW = "new_property";
 
-
+/**
+ *
+ */
+   public static final int ITEM_COUNT=10;
     /**
      * The dummy content this fragment is presenting.
      */

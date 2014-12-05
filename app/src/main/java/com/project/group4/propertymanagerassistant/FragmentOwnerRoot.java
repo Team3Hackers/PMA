@@ -117,7 +117,7 @@ public class FragmentOwnerRoot extends Fragment /*implements FragmentLifecycle*/
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        for(int i = 1; i <= 10; i++){
+        for(int i = 1; i <= PropertyDetailFragment.ITEM_COUNT; i++){
             menu.removeItem(i);
         }
         menu.add(menu.NONE, 7, 7, "Edit Owner");

@@ -28,13 +28,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PropertyListActivity" />
         </activity>
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
 
         <provider
             android:name="com.project.group4.propertymanagerassistant.database.PropertyProvider"
             android:authorities="com.project.group4.propertymanagerassistant.provider"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true"
+            android:grantUriPermissions="true">
         </provider>
+
     </application>
 
 </manifest>

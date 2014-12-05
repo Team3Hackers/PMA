@@ -4,10 +4,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -32,6 +37,10 @@ import android.widget.Toast;
 import com.project.group4.propertymanagerassistant.database.DatabaseHandler;
 import com.project.group4.propertymanagerassistant.database.PropertyTransaction;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -237,10 +246,11 @@ public class FragmentReportTab extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= PropertyDetailFragment.ITEM_COUNT; i++) {
             menu.removeItem(i);
         }
-        menu.add((int) propertyId, 10, 10, "Report Filter");
+        menu.add((int) propertyId, 10, 10, "Run Report");
+
     }
 
 
@@ -286,10 +296,92 @@ public class FragmentReportTab extends Fragment {
                 reportList.setAdapter(newer);
 
             }
+//        else if (item.getItemId() == 11 && item.getGroupId() == (int) propertyId){
+//            writeAndSendCsv();
+//        }
 
 
         return super.onOptionsItemSelected(item);
     }
+
+
+//
+//    private void writeAndSendCsv(){
+//
+//
+//        String columnString =   PropertyTransaction.COL_DATE + ","+
+//                                PropertyTransaction.COL_CATEGORY + ","+
+//                                PropertyTransaction.COL_PAYEE + ","+
+//                                PropertyTransaction.COL_AMOUNT + ","+
+//                                PropertyTransaction.COL_NOTE;
+//        String dataString   =   "empty,empty,empty,empty,empty";
+//        String combinedString = columnString + "\n" + dataString;
+//       // File file = new File(getActivity().getFilesDir(), "my_data");
+////
+//
+//        getActivity().getExternalFilesDir()
+//        File file   = null;
+//        String root   = Environment.getExternalStorageDirector().getAbsolutePath();
+//        String sd_state = Environment.getExternalStorageState();
+//        Log.d("dir", root.toString());
+//        Log.d("dir", Environment.MEDIA_MOUNTED);
+//
+//        if (Environment.MEDIA_MOUNTED.equals(sd_state)){
+//            File dir    =   new File (root + "/PersonData");
+//           Log.d("dir", dir.toString());
+//            dir.mkdirs();
+//            file   =   new File(dir, "Data.csv");
+//            FileOutputStream out   =   null;
+//            try {
+//                out = new FileOutputStream(file);
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//            try {
+//                out.write(combinedString.getBytes());
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            try {
+//                out.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//    Uri u1  =   null;
+//    u1  =   Uri.fromFile(file);
+//
+//
+//
+//    Intent sendIntent = new Intent(Intent.ACTION_SEND);
+//    sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Property Details");
+//    sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
+//    sendIntent.setType("text/html");
+//
+//        try {
+//            startActivity(sendIntent);
+//        } catch (android.content.ActivityNotFoundException ex) {
+//            Toast.makeText(getActivity(), "There are no email applications or accounts installed.", Toast.LENGTH_SHORT).show();
+//        }
+//
+//
+//        //Cleanup after email launch?
+//       // file.delete();
+//    }
+
+
+    public File getTempFile(Context context, String url) {
+        File file=null;
+        try {
+            String fileName = Uri.parse(url).getLastPathSegment();
+            file = File.createTempFile(fileName, null, context.getCacheDir());
+        }catch(IOException e){
+                // Error while creating file
+            }
+            return file;
+     }
+
 
 
     private String queryStringBuilder(String start, String end, String cat, String payee)  {
@@ -509,6 +601,7 @@ public class FragmentReportTab extends Fragment {
         return date;
 
     }
+
 
 
 
