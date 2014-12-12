@@ -16,19 +16,18 @@ import android.view.ViewGroup;
 import com.project.group4.propertymanagerassistant.database.Property;
 
 /**
- * Example about replacing fragments inside a ViewPager. I'm using
- * android-support-v7 to maximize the compatibility.
- * 
- * @author Dani Lao (@dani_lao)
- * 
+ * Used as a root fragment to be replaced by other fragments. Needed with the
+ * viewpager, as the main acivity has no managment of fragments held with in
+ * the viewpager.
+ *
  */
+
 public class FragmentTenantRoot extends Fragment /*implements FragmentLifecycle*/ {
 
 	private static final String TAG = "RootFragment";
 
     long propertyId;///Using this as a test, before we get to transaction tables. REFACTOR WHEN WOKRING
     Boolean newProperty = false;//Default
-    String fragmentType;//Type of incoming fragment
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,7 +39,6 @@ public class FragmentTenantRoot extends Fragment /*implements FragmentLifecycle*
             newProperty = savedInstanceState.getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
             FragmentTenantTab tenant = (FragmentTenantTab) getActivity().getSupportFragmentManager().findFragmentByTag("current_tenant_tab");
             FragmentTransaction ft =  getActivity().getSupportFragmentManager().beginTransaction();
-
             ft.detach(tenant);
             ft.attach(tenant);
             ft.commit();
@@ -49,8 +47,6 @@ public class FragmentTenantRoot extends Fragment /*implements FragmentLifecycle*
             propertyId = getArguments().getLong(PropertyDetailFragment.ARG_ITEM_ID);
             newProperty = getArguments().getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
             FragmentManager fm = getActivity().getSupportFragmentManager();
-            //if (savedInstanceState == null){
-
             Bundle args = new Bundle();
             args.putLong(PropertyDetailFragment.ARG_ITEM_ID, propertyId);
             args.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW, newProperty);
@@ -81,32 +77,9 @@ public class FragmentTenantRoot extends Fragment /*implements FragmentLifecycle*
 			Bundle savedInstanceState) {
 		/* Inflate the layout for this fragment */
 		View view = inflater.inflate(R.layout.root_fragment_tenant, container, false);
-
-//
-//        FragmentManager fm = getActivity().getSupportFragmentManager();
-//        //if (savedInstanceState == null){
-//
-//        Bundle args = new Bundle();
-//        args.putLong(PropertyDetailFragment.ARG_ITEM_ID, propertyId);
-//        args.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW, newProperty);
-//        FragmentTenantTab tenant = new FragmentTenantTab();
-//        tenant.setArguments(args);
-//        fm.beginTransaction().replace(R.id.tenant_root_frame, tenant).commit();
-
-
-
 		return view;
 	}
 
-    /**
-     * Function to pass property arguments to this fragment.
-     * Needed untill we figure out Bundle passing...
-     */
-//    public void setPropertyArgs(Long propertyId, Boolean newProperty, String incomingFragentType) {
-//        this.propertyId = propertyId;
-//        this.newProperty = newProperty;
-//        this.fragmentType = incomingFragentType;
-//    }
 
 
     @Override

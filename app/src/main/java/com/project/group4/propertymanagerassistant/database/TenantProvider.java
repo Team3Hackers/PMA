@@ -17,10 +17,8 @@ public class TenantProvider extends ContentProvider {
     public static final String SCHEME = "content://";
 
     // URIs
-    // Used for all persons
     public static final String TENANT = SCHEME + AUTHORITY + "/tenant";
     public static final Uri URI_TENANT = Uri.parse(TENANT);
-    // Used for a single person, just add the id to the end
     public static final String TENANT_BASE = TENANT + "/";
 
     public TenantProvider() {
@@ -29,14 +27,12 @@ public class TenantProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        // Implement this to handle requests to delete one or more rows.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public String getType(Uri uri) {
         // TODO: Implement this to handle requests for the MIME type of the data
-        // at the given URI.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 

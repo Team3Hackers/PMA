@@ -15,17 +15,16 @@ import android.view.ViewGroup;
 import com.project.group4.propertymanagerassistant.database.Property;
 
 /**
- * Example about replacing fragments inside a ViewPager. I'm using
- * android-support-v7 to maximize the compatibility.
- *
- * @author Dani Lao (@dani_lao)
+ * Used as a root fragment to be replaced by other fragments. Needed with the
+ * viewpager, as the main acivity has no managment of fragments held with in
+ * the viewpager.
  *
  */
 public class FragmentOwnerRoot extends Fragment /*implements FragmentLifecycle*/ {
 
 	private static final String TAG = "RootFragment";
 
-    Long propertyId;///Using this as a test, before we get to transaction tables. REFACTOR WHEN WOKRING
+    Long propertyId;
     Boolean newProperty = false;//Default
     String fragmentType;//Type of incoming fragment
 
@@ -52,7 +51,6 @@ public class FragmentOwnerRoot extends Fragment /*implements FragmentLifecycle*/
            newProperty = getArguments().getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
 
            FragmentManager fm =  getActivity().getSupportFragmentManager();
-//           FragmentOwnerTab owner;
 
            Bundle args = new Bundle();
            args.putLong(PropertyDetailFragment.ARG_ITEM_ID, propertyId);
@@ -75,38 +73,6 @@ public class FragmentOwnerRoot extends Fragment /*implements FragmentLifecycle*/
 
 		/* Inflate the layout for this fragment */
 		View view = inflater.inflate(R.layout.root_fragment_owner, container, false);
-
-
-
-
-//        FragmentManager fm =  getActivity().getSupportFragmentManager();
-//        FragmentOwnerTab owner;
-//
-//        Bundle args = new Bundle();
-//        args.putLong(PropertyDetailFragment.ARG_ITEM_ID, propertyId);
-//        args.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW, newProperty);
-//        //
-//        owner = new FragmentOwnerTab();
-//        owner.setArguments(args);
-//        fm.beginTransaction().replace(R.id.owner_root_frame, owner).commit();
-
-
-
-//		FragmentTransaction transaction = getFragmentManager()
-//				.beginTransaction();
-//
-//                Bundle args = new Bundle();
-//            args.putLong(PropertyDetailFragment.ARG_ITEM_ID, propertyId);
-//            args.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW, newProperty);
-//
-//
-//            FragmentOwnerTab owner = new FragmentOwnerTab();
-//            owner.setArguments(args);
-//            transaction.replace(R.id.owner_root_frame, owner);
-//
-//
-//
-//		transaction.commit();
 
 
 

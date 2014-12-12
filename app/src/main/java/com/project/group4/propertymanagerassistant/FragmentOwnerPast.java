@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 /**
  *
- * This fragment simply displays a
+ * This fragment simply displays a list of past Owners for a property
  *
  *
  */
@@ -32,8 +32,7 @@ public class FragmentOwnerPast extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState!=null){//On a rotation, may not do this, root will give this.
-//            Maybe I am doing this to get a item??
+        if (savedInstanceState!=null){
             propertyId = savedInstanceState.getLong(PropertyDetailFragment.ARG_ITEM_ID);
             newProperty = savedInstanceState.getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
         }
@@ -47,10 +46,9 @@ public class FragmentOwnerPast extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-//changer tenantlist...
+
         DatabaseHandler db = DatabaseHandler.getInstance(getActivity());
         Cursor crs = db.getOwnerJoinNotActive(this.propertyId);
-                //getArguments().getLong(PropertyDetailFragment.ARG_ITEM_ID));//propertyId
         ArrayList<String> tenantList = new ArrayList<String>();
 
         if (crs != null) {

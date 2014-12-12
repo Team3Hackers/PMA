@@ -30,15 +30,11 @@ public class FragmentPropertyTab extends Fragment implements /*FragmentLifecycle
     private TextView textCity;
     private TextView textState;
     private TextView textZip;
-
-
-    String textString;
     long propertyId;
     Boolean newProperty = false;
-    TextView text;
     Button saveButton;
 
-    private Menu thisMenu;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,31 +107,17 @@ public class FragmentPropertyTab extends Fragment implements /*FragmentLifecycle
         super.onPause();
     }
 
-    //MAYNOT NEED RIGHT NOW
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-       // text = (TextView) getActivity().findViewById(R.id.textView);//Set text view
-
-
     }
 
-//Saving state of text?
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putLong(PropertyDetailFragment.ARG_ITEM_ID, propertyId);
         outState.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW, newProperty);
     }
-
-
-    /*
-    //Testing to insure we got the correct property ID, we do need to make sure stuff is good before we acces the text view. Because we call this from adaptor, the view is not creting
-    public void setPropertyId(String data){
-        this.propertyId = data;//setting the string
-        Log.d("FragmentOwnerTab", "Here now, with " + data);//testing
-    }
-*/
 
 
     @Override
@@ -172,7 +154,7 @@ public class FragmentPropertyTab extends Fragment implements /*FragmentLifecycle
         }
     }
 
-    @Override//WORKING WITH EDIT ONLY RIGHT NOW, NEED GET THE BUTTON WHEN OUTSIDE ACTIVITY SELECTS NEW PROP
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == 3
@@ -194,15 +176,4 @@ public class FragmentPropertyTab extends Fragment implements /*FragmentLifecycle
             Toast.makeText(getActivity(), mItem.address + " saved to database", Toast.LENGTH_SHORT).show();
     }
 
-//    @Override
-//    public void onPauseFragment() {
-////        this.thisMenu.clear();
-//
-//    }
-//
-//    @Override
-//    public void onResumeFragment() {
-//       //getActivity().invalidateOptionsMenu();
-//
-//    }
 }

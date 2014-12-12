@@ -26,14 +26,7 @@ public class PropertyDetailFragment extends Fragment{
      */
     public static final String ARG_ITEM_NEW = "new_property";
 
-/**
- *
- */
-   public static final int ITEM_COUNT=10;
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    //private DummyContent.DummyItem mItem;
+    public static final int ITEM_COUNT=10;
 
     //create viewPager
     ViewPager viewPager=null;
@@ -53,7 +46,7 @@ public class PropertyDetailFragment extends Fragment{
         Log.d("PropDetailFrag" , "onCreate");
 
        }
-/**----------------**/
+
     /**
      * This OnPageChangeListner is used to listen for tab swipes.
      * This method is used to create custom fragment lifecycles with the tabs.
@@ -65,16 +58,8 @@ public class PropertyDetailFragment extends Fragment{
 
         @Override
         public void onPageSelected(int newPosition) {
-
-
             getActivity().supportInvalidateOptionsMenu();//Call back to call update to menu options every page swipe
             currentPosition = newPosition;
-            /**
-             * This method calls the getItemPosition method in TabAdaptor.
-             * I used it to force the fragment to reload, which calls all the textfield code, and
-             * I used it to write to the db
-             */
-//            myTabAdapter.notifyDataSetChanged();
         }
 
         /**
@@ -87,7 +72,6 @@ public class PropertyDetailFragment extends Fragment{
         public void onPageScrollStateChanged(int arg0) { }
     };
 
-/**---------------**/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,8 +87,6 @@ public class PropertyDetailFragment extends Fragment{
          * Here, I pass the selected ID from the list to the adaptor.
          * The adaptor will later set the active fragment with the id.
          * That fragment will use it to query the database.
-         * There is a better way to do this, but I suck.
-         * Should be able to use bundle like we did here. To be continued...
          */
         if (getArguments() != null ) {
             myTabAdapter.setId(getArguments().getLong(ARG_ITEM_ID), getArguments().getBoolean(ARG_ITEM_NEW));//Send ID to adaptor to have the property id for all fragments
@@ -119,13 +101,6 @@ public class PropertyDetailFragment extends Fragment{
         //Sets the onPageChangeListner to implement the onpause and onresume
         viewPager.setOnPageChangeListener(pageChangeListener);//here
         viewPager.setAdapter(myTabAdapter);
-
-/*Left this in long for clarity
- *replace next 2 lines with {lin1 and 2}
- * if(getArguments().getBoolean(ARG_ITEM_NEW))
- */
-
-
         Boolean selectedTab = getArguments().getBoolean(ARG_ITEM_NEW);//line1
         if(selectedTab){//line2
             viewPager.setCurrentItem(1, true);//This works,

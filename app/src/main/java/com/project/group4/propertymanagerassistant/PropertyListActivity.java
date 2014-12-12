@@ -45,7 +45,7 @@ public class PropertyListActivity extends FragmentActivity
      */
     private boolean mTwoPane;
     private boolean newProperty = false;
-private boolean test = false;
+    private boolean test = false;
     private boolean propertySelected = false ;
 
 
@@ -89,30 +89,13 @@ private boolean test = false;
     @Override
     public void onItemSelected(Long id) {
 
-
-        //propertyId = id;//only used when item is selected in Options menu, careful
-       // invalidateOptionsMenu(); DONT THINK I NEED THIS, BUT CHECK BIG SCREEN DEVICE
-
         Bundle arguments = new Bundle();
         arguments.putLong(PropertyDetailFragment.ARG_ITEM_ID, id);
         arguments.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW, newProperty);//Selected in options menu
         newProperty = false;//Reset this flag AFTER USAGE
 
         if (mTwoPane) {
-            // In two-pane mode, show the detail view in this activity by
-            // adding or replacing the detail fragment using a
-            // fragment transaction.
-//Log.d("Crap", ""+getSupportFragmentManager().findFragmentByTag("test"));
-/**
- * try to remove this..
- */
 
-        //Test-this wrked
-//            PropertyDetailFragment fragment = new PropertyDetailFragment();//
-//            getSupportFragmentManager().popBackStack(null, getSupportFragmentManager().POP_BACK_STACK_INCLUSIVE);
-//            fragment.setArguments(arguments);
-//            getSupportFragmentManager().beginTransaction().replace(R.id.property_detail_container, fragment).addToBackStack(null).commit();
-            //OG
                 PropertyDetailFragment fragment = new PropertyDetailFragment();//
                 fragment.setArguments(arguments);
 
@@ -139,22 +122,15 @@ private boolean test = false;
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
-/** Only offer "New Property" item in main activity.
- *  All other menu items will be handled in their respective fragments
- */
-        //inflater.inflate(R.menu.list_activity_small, menu);
-
+        /** Only offer "New Property" item in main activity.
+         *  All other menu items will be handled in their respective fragments
+         */
         menu.add(menu.NONE, 0, 0, "Add New Property");
-
-
-
         return true;
     }
 
     /**
      * Action to perform when the user selects an item from menu
-     * @param item : Item the user selected
-     * @return     : Success
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -166,7 +142,7 @@ private boolean test = false;
                 result = true;
                 // Create a new person.
                 Property p = new Property();
-                DatabaseHandler.getInstance(this).putNewProperty(p);//putNewProperty is hail mary
+                DatabaseHandler.getInstance(this).putNewProperty(p);
                 // Open a new fragment with the new id
                 onItemSelected(p.id);
                 break;
@@ -186,9 +162,4 @@ private boolean test = false;
         outState.putBoolean("test",true);
     }
 
-
-//    @Override
-//    public void onClickItem(DialogFragment dialog) {
-//
-//    }
 }

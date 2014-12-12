@@ -36,12 +36,10 @@ import java.util.ArrayList;
 
 /**
  *
- * This fragment simply displays a
+ * This fragment simply displays a list of past tenants
  *
  *
  */
-
-
 
 public class FragmentTenantPast extends ListFragment {
 
@@ -53,7 +51,7 @@ public class FragmentTenantPast extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState!=null){//On a rotation, may not do this, root will give this.
-//            Maybe I am doing this to get a item??
+
             propertyId = savedInstanceState.getLong(PropertyDetailFragment.ARG_ITEM_ID);
             newProperty = savedInstanceState.getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
         }
@@ -89,9 +87,6 @@ public class FragmentTenantPast extends ListFragment {
             tenantList.add("No Past Tenants");
         }
 
-        // This is the array adapter, it takes the context of the activity as a
-        // first parameter, the type of list view as a second parameter and your
-        // array as a third parameter.
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 getActivity(),
                 android.R.layout.simple_list_item_1,
@@ -112,18 +107,6 @@ public class FragmentTenantPast extends ListFragment {
         fm.popBackStack ("StaticFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
-//    /**
-//     * Function to pass property arguments to this fragment.
-//     * Needed untill we figure out Bundle passing...
-//     * @param propertyId
-//     *          Thid id the primary key of the property table in database
-//     * @param newProperty
-//     *          This is true when the user selects the menu option to create new property
-//     */
-//    public void setPropertyArgs(Long propertyId, Boolean newProperty) {
-//        this.propertyId = propertyId;
-//        this.newProperty = newProperty;
-//    }
 }
 
 

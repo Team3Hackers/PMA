@@ -249,17 +249,7 @@ Log.d("FragTrans", "onCreate");
                     builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //Build edits
-
-//                            newTransaction.id = selectedCursor.getLong(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_ID));
-//                            newTransaction.property = selectedCursor.getLong(selectedCursor.getColumnIndexOrThrow(PropertyTransaction.COL_PROPERTY));
-                            //isValidDate will return null if given formatt is bad
                             newTransaction.date =  isValidDate( date.getText().toString() );
-//                            newTransaction.category = category.getText().toString();
-//                            newTransaction.payee = payee.getText().toString();
-//                            newTransaction.amount = amount.getText().toString();
-//                            newTransaction.note = note.getText().toString();
-
 
                             //Verify date input
                             if(  newTransaction.date  != null ){
@@ -363,14 +353,13 @@ Log.d("FragTrans", "onCreate");
                         newTransaction.payee = payee.getText().toString();
                         newTransaction.amount = amount.getText().toString();
                         newTransaction.note = note.getText().toString();
-//Error check for date
+                        //Error check for date
                         if( isValidDate( date.getText().toString() ) == null) {
                             Toast.makeText(getActivity().getBaseContext(),
                                     newTransaction.date + " needs to be in "+ FragmentReportTab.DATE_FORMAT +" format"
                                     , Toast.LENGTH_LONG).show();
                             return;
                         }
-
                         //if() databasetransaction not null, go for it..
                         if (DatabaseHandler.getInstance(getActivity()).putPropertyTransaction(newTransaction)) {
                             //Message item was entered into database
@@ -446,10 +435,7 @@ Log.d("FragTrans", "onCreate");
         }
 
         s = df1.format(d);
-//        if(date.equals(s))
-            return s;
-//        else
-//            return null;
+        return s;
     }
 
 

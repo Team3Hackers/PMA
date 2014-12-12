@@ -260,12 +260,6 @@ public class FragmentReportTab extends Fragment {
 
                 ListView reportList = (ListView) getView().findViewById(R.id.reportListView);
 
-//            DialogFragment test = new GetPropertyTransactionTypes();
-//            test.setArguments(getArguments());
-//            test.setTargetFragment(this, 0);
-//            test.show(getChildFragmentManager(),"test");
-
-
                 String query = queryStringBuilder(startDate.getText().toString(), endDate.getText().toString(),
                         categorty.getText().toString(), payee.getText().toString());
 
@@ -296,79 +290,9 @@ public class FragmentReportTab extends Fragment {
                 reportList.setAdapter(newer);
 
             }
-//        else if (item.getItemId() == 11 && item.getGroupId() == (int) propertyId){
-//            writeAndSendCsv();
-//        }
-
-
         return super.onOptionsItemSelected(item);
     }
 
-
-//
-//    private void writeAndSendCsv(){
-//
-//
-//        String columnString =   PropertyTransaction.COL_DATE + ","+
-//                                PropertyTransaction.COL_CATEGORY + ","+
-//                                PropertyTransaction.COL_PAYEE + ","+
-//                                PropertyTransaction.COL_AMOUNT + ","+
-//                                PropertyTransaction.COL_NOTE;
-//        String dataString   =   "empty,empty,empty,empty,empty";
-//        String combinedString = columnString + "\n" + dataString;
-//       // File file = new File(getActivity().getFilesDir(), "my_data");
-////
-//
-//        getActivity().getExternalFilesDir()
-//        File file   = null;
-//        String root   = Environment.getExternalStorageDirector().getAbsolutePath();
-//        String sd_state = Environment.getExternalStorageState();
-//        Log.d("dir", root.toString());
-//        Log.d("dir", Environment.MEDIA_MOUNTED);
-//
-//        if (Environment.MEDIA_MOUNTED.equals(sd_state)){
-//            File dir    =   new File (root + "/PersonData");
-//           Log.d("dir", dir.toString());
-//            dir.mkdirs();
-//            file   =   new File(dir, "Data.csv");
-//            FileOutputStream out   =   null;
-//            try {
-//                out = new FileOutputStream(file);
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            }
-//            try {
-//                out.write(combinedString.getBytes());
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            try {
-//                out.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//    Uri u1  =   null;
-//    u1  =   Uri.fromFile(file);
-//
-//
-//
-//    Intent sendIntent = new Intent(Intent.ACTION_SEND);
-//    sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Property Details");
-//    sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
-//    sendIntent.setType("text/html");
-//
-//        try {
-//            startActivity(sendIntent);
-//        } catch (android.content.ActivityNotFoundException ex) {
-//            Toast.makeText(getActivity(), "There are no email applications or accounts installed.", Toast.LENGTH_SHORT).show();
-//        }
-//
-//
-//        //Cleanup after email launch?
-//       // file.delete();
-//    }
 
 
     public File getTempFile(Context context, String url) {
@@ -448,11 +372,6 @@ public class FragmentReportTab extends Fragment {
     }
 
 
-    /**
-     * crap
-     */
-
-
 
     public Dialog onCreateDialogPayeeSelector(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -526,21 +445,8 @@ public class FragmentReportTab extends Fragment {
         return builder.create();
     }
 
-    /**
-     * crap
-     */
 
-
-
-
-
-
-
-
-
-
-
-    // showDatePickerDialog ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // showDatePickerDialog
     private void showDatePickerDialogStartDate( View view ) {
         // Use the current date as the default date in the picker
         final Calendar c = Calendar.getInstance();
@@ -552,18 +458,18 @@ public class FragmentReportTab extends Fragment {
         dpd.setTitle("Select Start Date");
         dpd.show();
 
-    } // showDatePickerDialog ----------------------------------------------------
+    }
 
 
-    // OnDateSetListener +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // OnDateSetListener
     DatePickerDialog.OnDateSetListener startDateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override public void onDateSet( DatePicker view, int year, int month, int day ) {
             month++;
             startDate.setText( dateFormater(year, month, day ) );
         } // onDateSet
-    }; // OnDateSetListener ------------------------------------------------------
+    };
 
-    // showDatePickerDialog ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // showDatePickerDialog
     private void showDatePickerDialogEndDate( View view ) {
         // Use the current date as the default date in the picker
         final Calendar c = Calendar.getInstance();
@@ -575,16 +481,16 @@ public class FragmentReportTab extends Fragment {
         dpd.setTitle("Select End Date");
         dpd.show();
 
-    } // showDatePickerDialog ----------------------------------------------------
+    }
 
 
-    // OnDateSetListener +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // OnDateSetListener
     DatePickerDialog.OnDateSetListener endDateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override public void onDateSet( DatePicker view, int year, int month, int day ) {
             month++;
             endDate.setText( dateFormater(year, month, day ) );
         } // onDateSet
-    }; // OnDateSetListener ------------------------------------------------------
+    };
 
 
     private String dateFormater(int year, int month, int day){
@@ -606,52 +512,5 @@ public class FragmentReportTab extends Fragment {
 
 
 }
-
-
-
-
-
-
-//    /**
-//     * Saving for adaptor example!!
-//     */
-//    public static class GetPropertyTransactionTypes extends DialogFragment {
-//
-//        public Dialog onCreateDialog(Bundle savedInstanceState) {
-//
-//
-//            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//
-//            Cursor cursor = DatabaseHandler.
-//                    getInstance(getActivity()).
-//                    getAllPropertyTransactionWithUniqOnSearchToken(getArguments().getLong(PropertyDetailFragment.ARG_ITEM_ID),
-//                            PropertyTransaction.COL_CATEGORY );
-//
-//
-//
-////Works great, but need to add element null
-//            SimpleCursorAdapter newer = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, cursor,
-//                    new String[]{ PropertyTransaction.COL_PAYEE },//Items that go into list
-//                    new int[]{android.R.id.text1}, 0);//type of var that item is
-//                        builder.setTitle("Select Transaction Type Filter");
-//
-//                        builder.setAdapter(newer, new DialogInterface.OnClickListener() {
-//
-//
-//                public void onClick(DialogInterface dialog, int which) {
-//
-//                    //TODO: Add the onclick function
-//                    // The 'which' argument contains the index position
-//                    // of the selected item
-//                }
-//            });
-//
-//            return builder.create();
-//        }
-//
-//
-//    }
-
-
 
 

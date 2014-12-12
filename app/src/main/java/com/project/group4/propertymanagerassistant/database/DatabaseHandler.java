@@ -283,7 +283,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         int result = 0;
         final SQLiteDatabase db = this.getWritableDatabase();
 
-//insert instead
             final long id = db.insert(Property.TABLE_NAME, null,
                     property.getContent());
 
@@ -350,7 +349,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         return success;
     }
-     /**END TESTING**/
 
 
     public synchronized boolean putProperty(final Property property) {
@@ -479,11 +477,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return null;
         }
 
-//        Tenant item = null;
-//        if (cursor.moveToFirst()) {
-//            item = new Tenant(cursor);
-//        }
-        //cursor.close();
         return cursor;
     }
 
@@ -515,17 +508,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         boolean success = false;
         int result = 0;
         final SQLiteDatabase db = this.getWritableDatabase();
-/*
-        if (Tenant.id > -1) {
-            result += db.update(Tenant.TABLE_NAME, Tenant.getContent(),
-                    Tenant.COL_ID + " IS ?",
-                    new String[] { String.valueOf(Tenant.id) });
-        }
 
-        if (result > 0) {
-            success = true;
-        } else {
-*/
             // insert into table
             final long id = db.insert(Tenant.TABLE_NAME, null,
                     Tenant.getContent());
@@ -534,7 +517,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 Tenant.id = id;//Why do we do this???
                 success = true;
             }
-//        }
+
 
         if (success) {
             notifyProviderOnTenantChange();
@@ -542,7 +525,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         return success;
     }
-    //NOT DELETING ANY TENANT!
+
     public synchronized int removeTenant(final Tenant Tenant) {
         final SQLiteDatabase db = this.getWritableDatabase();
         final int result = db.delete(Tenant.TABLE_NAME,
@@ -554,7 +537,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         return result;
     }
-    //INCUDE ACCOCIATION TABLE
+
     private void notifyProviderOnTenantChange() {
         context.getContentResolver().notifyChange(
                 TenantProvider.URI_TENANT, null, false);//
@@ -567,14 +550,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         boolean success = false;
         int result = 0;
         final SQLiteDatabase db = this.getWritableDatabase();
-// insert into table
         final long id = db.insert(TenantActive.TABLE_NAME, null,
                 TenantActive.getContent());
 
         if (id > -1) {
             success = true;
         }
-//        }
+
 
         if (success) {
  //           notifyProviderOnTenantActiveChange();
@@ -597,9 +579,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 TenantActive.COL_PROPERTY_ID + " IS ?", new String[] { String.valueOf(id) },
                 null, null, null, null);
 
-        //final Cursor cursor = db.query(Tenant.TABLE_NAME, Tenant.FIELDS,
-        //       Tenant.COL_ID + " IS ?", new String[] { String.valueOf(id) },
-        //      null, null, null, null);
         if (cursor == null || cursor.isAfterLast()) {
             return null;
         }
@@ -697,11 +676,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return null;
         }
 
-//        Owner item = null;
-//        if (cursor.moveToFirst()) {
-//            item = new Owner(cursor);
-//        }
-        //cursor.close();
         return cursor;
     }
 
@@ -733,17 +707,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         boolean success = false;
         int result = 0;
         final SQLiteDatabase db = this.getWritableDatabase();
-/*
-        if (Owner.id > -1) {
-            result += db.update(Owner.TABLE_NAME, Owner.getContent(),
-                    Owner.COL_ID + " IS ?",
-                    new String[] { String.valueOf(Owner.id) });
-        }
 
-        if (result > 0) {
-            success = true;
-        } else {
-*/
         // insert into table
         final long id = db.insert(Owner.TABLE_NAME, null,
                 Owner.getContent());
@@ -752,7 +716,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             Owner.id = id;//Why do we do this???
             success = true;
         }
-//        }
 
         if (success) {
             notifyProviderOnOwnerChange();
@@ -760,19 +723,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         return success;
     }
-//    //NOT DELETING ANY OWNER!
-//    public synchronized int removeOwner(final Owner Owner) {
-//        final SQLiteDatabase db = this.getWritableDatabase();
-//        final int result = db.delete(Owner.TABLE_NAME,
-//                Owner.COL_ID + " IS ?",
-//                new String[] { Long.toString(Owner.id) });
-//
-//        if (result > 0) {
-//            notifyProviderOnOwnerChange();
-//        }
-//        return result;
-//    }
-    //INCUDE ACCOCIATION TABLE
+
     private void notifyProviderOnOwnerChange() {
         context.getContentResolver().notifyChange(
                 OwnerProvider.URI_OWNER, null, false);//
@@ -785,14 +736,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         boolean success = false;
         int result = 0;
         final SQLiteDatabase db = this.getWritableDatabase();
-// insert into table
+
         final long id = db.insert(OwnerActive.TABLE_NAME, null,
                 OwnerActive.getContent());
 
         if (id > -1) {
             success = true;
         }
-//        }
 
         if (success) {
                       notifyProviderOnOwnerActiveChange();
@@ -901,28 +851,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         else{
 
-            return cursor;//TODO: Do i need to close these cursors...
+            return cursor;
         }
 
     }
 
     public synchronized Cursor fetchPayeeByName(String searchToken, final long id){
         final SQLiteDatabase db = this.getReadableDatabase();
-//        final Cursor cursor = db.query(PropertyTransaction.TABLE_NAME, PropertyTransaction.FIELDS,
-//                PropertyTransaction.COL_PROPERTY + " IS ? AND " + PropertyTransaction.COL_PAYEE + " LIKE  %?%",
-//                new String[] { String.valueOf(id), searchToken },
-//                null, null, null, null);
         final Cursor cursor = db.rawQuery("SELECT * FROM " + PropertyTransaction.TABLE_NAME + " WHERE " +
                 PropertyTransaction.COL_PROPERTY + " = " + id +
                         " AND " + PropertyTransaction.COL_PAYEE + " LIKE  '%" + searchToken +"%'", null);
-//        while (cursor.moveToNext()) {
-////test search....
-//            Log.d("WTF",
-//
-//                    cursor.getString(cursor.getColumnIndex(PropertyTransaction.COL_PAYEE)) + " " +
-//                            cursor.getString(cursor.getColumnIndex(PropertyTransaction.COL_AMOUNT))
-//            );
-//        }
 
 
         if (cursor == null || cursor.isAfterLast()) {
@@ -933,22 +871,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return cursor;
         }
     }
-//    public synchronized Cursor getAllPropertyTransactionPayees(final long id) {
-//        final SQLiteDatabase db = this.getReadableDatabase();
-//        final Cursor cursor = db.query(true, PropertyTransaction.TABLE_NAME, new String {PropertyTransaction.COL_ID,  },
-//                PropertyTransaction.COL_PROPERTY + " IS ? ", new String[] { String.valueOf(id) },
-//                null, null,PropertyTransaction.COL_DATE + " DESC ", null);
-//
-//
-//        if (cursor == null || cursor.isAfterLast()) {
-//            return null;
-//        }
-//        else{
-//
-//            return cursor;
-//        }
-//
-//    }
 
     public synchronized boolean putPropertyTransaction(final PropertyTransaction propertyTransaction) {
         boolean success = false;
@@ -1023,6 +945,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
     /*** End of Transaction ***/
 
+
+    /**
+     * Helper function to adjuct time when building the dummy data in the database
+     */
 private Calendar shiftTime(Calendar cal){
     Random r = new Random();
     int i1 = r.nextInt(80);

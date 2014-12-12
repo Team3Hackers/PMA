@@ -48,7 +48,6 @@ public class FragmentOwnerTab extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);//notify fragment it has option menu
-        /****/
 
         if (savedInstanceState!=null){//On a rotation, may not do this, root will give this.
 
@@ -60,10 +59,6 @@ public class FragmentOwnerTab extends Fragment implements View.OnClickListener {
             propertyId = getArguments().getLong(PropertyDetailFragment.ARG_ITEM_ID);
             newProperty = getArguments().getBoolean(PropertyDetailFragment.ARG_ITEM_NEW);
         }
-
-
-
-
     }
 
 
@@ -116,18 +111,6 @@ public class FragmentOwnerTab extends Fragment implements View.OnClickListener {
             textPhone.setText(mItem.phone);
 
         }
-//        else {//May never reach this since we build the tables in database handler construction
-//            //Create new owner object?
-//            mItem = new Owner();
-//            //Create new owner active object?
-//            assocationItem = new OwnerActive();
-//        }
-
-
-
-
-
-
         return view;
     }
 
@@ -147,9 +130,6 @@ public class FragmentOwnerTab extends Fragment implements View.OnClickListener {
             mItem.state = textState.getText().toString();
             mItem.zip = textZip.getText().toString();
             mItem.phone = textPhone.getText().toString();
-//            if(newOwner){
-//                mItem.ownerActive = "0";//Set past owner flag to not active
-//            }
             DatabaseHandler.getInstance(getActivity()).updateOwner(mItem);//update
 
         }
@@ -180,12 +160,10 @@ public class FragmentOwnerTab extends Fragment implements View.OnClickListener {
 
     private void insertOwnerActiveInFragment() {
 
-
-        //if (assocationItem != null){//and mitem??
         assocationItem.id = propertyId;
         assocationItem.idOwner = mItem.id;//Get this from query above
         DatabaseHandler.getInstance(getActivity()).updateOwnerActive(assocationItem);
-        // }
+
     }
 
     @Override
@@ -201,8 +179,6 @@ public class FragmentOwnerTab extends Fragment implements View.OnClickListener {
             tempItem = mItem;
             saveButton.setVisibility(View.VISIBLE);
 
-            //mItem.ownerActive = "0";//disable old owners status
-            //updateOwnerFromUI();//Update old owners status
         }
         else if(item.getItemId()==9) {
             /** Create bundle to send to next fragment **/
@@ -227,7 +203,7 @@ public class FragmentOwnerTab extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
 
-        /**BROKEN not making active Owner...
+        /**
          * Updates the empty table that was created when the user clicks "New Property", and then
          *  clicks the "New Owner" option.
          *  When a Property is made, there is a blank table for all relations for that
@@ -252,15 +228,13 @@ public class FragmentOwnerTab extends Fragment implements View.OnClickListener {
         /** This case is when the user selects  for updating the current owner.
          *
          */
-        else {//This is a edit, will i get here on a new proerty add??
+        else {
 
             updateOwnerFromUI();//Update existing active owner
 
         }
         saveButton.setVisibility(View.GONE);
 
-
-//TODO: DONT ALLOW USER TO SAVE UNTILL CRITIICAL DATA IS INPUTTED!
         Toast.makeText(getActivity(), mItem.firstName + " " + mItem.lastName + " saved to database", Toast.LENGTH_SHORT).show();
     }
 

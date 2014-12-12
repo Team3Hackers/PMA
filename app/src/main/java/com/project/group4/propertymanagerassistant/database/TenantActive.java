@@ -12,23 +12,13 @@ import android.database.Cursor;
  */
 public class TenantActive {
 
-    // SQL convention says Table name should be "singular"
     public static final String TABLE_NAME = "TenantActive";
-    // Naming the id column with an underscore is good to be consistent
-    // with other Android things. This is ALWAYS needed
     public static final String COL_PROPERTY_ID = "_id_property";
-    // These fields can be anything you want.
     public static final String COL_TENANT_ID = "_id_tenant";
 
-
-    // For database projection so order is consistent
     public static final String[] FIELDS = { COL_PROPERTY_ID, COL_TENANT_ID };
 
-    /*
-     * The SQL code that creates a Table for storing Persons in.
-     * Note that the last row does NOT end in a comma like the others.
-     * This is a common source of error.
-     */
+
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + "("
                     + COL_TENANT_ID + " INTEGER NOT NULL, "

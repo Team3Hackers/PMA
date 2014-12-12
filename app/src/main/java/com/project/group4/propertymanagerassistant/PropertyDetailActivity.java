@@ -53,21 +53,13 @@ public class PropertyDetailActivity extends FragmentActivity {
         // http://developer.android.com/guide/components/fragments.html
         //
         if (savedInstanceState == null) {
-/** This is an example on how to recive items from calling activity.
- *  Below, we got the id in a long call, but same idea.
- *  In fact, lets just keep passing it so we can remove that junky logic before this activity
-            Bundle extras = getIntent().getExtras();
-            Long id = extras.getLong(PropertyDetailFragment.ARG_ITEM_ID); //Get the incomming ID, uses ARG_ITEM_ID from that fragment in previous call
-            Boolean newProperty = extras.getBoolean("NEW");
-*/
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
+
             Bundle arguments = new Bundle();
 
             arguments.putLong(PropertyDetailFragment.ARG_ITEM_ID,
                     getIntent().getLongExtra(PropertyDetailFragment.ARG_ITEM_ID, -1));
             arguments.putBoolean(PropertyDetailFragment.ARG_ITEM_NEW,
-                    getIntent().getBooleanExtra(PropertyDetailFragment.ARG_ITEM_NEW,false/*default*/));//PROOFING
+                    getIntent().getBooleanExtra(PropertyDetailFragment.ARG_ITEM_NEW,false/*default*/));
 
             PropertyDetailFragment fragment = new PropertyDetailFragment();
 
@@ -91,11 +83,8 @@ public class PropertyDetailActivity extends FragmentActivity {
                 break;
             default:
                 break;
-
         }
-
         return result;
-//        //return super.onOptionsItemSelected(item);
     }
 
 
